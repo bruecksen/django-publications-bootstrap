@@ -114,6 +114,10 @@ class CitationsField(ManyToManyField):
 		self.text_field_name = text_field_name
 		self.citekey_extractor = citekey_extractor
 		self._is_updating_m2m = False
+		
+	def deconstruct(self):
+		name, path, args, kwargs = super(CitationsField, self).deconstruct()
+		return name, path, args + [self.text_field_name], kwargs
 
 	def contribute_to_class(self, cls, name):
 		ManyToManyField.contribute_to_class(self, cls, name)
@@ -218,3 +222,4 @@ try:
 	add_introspection_rules([([CitationsField], [], { 'text_field_name' : ('text_field_name', {}) })], ["^publications\.fields\.CitationsField"])
 except:
 	pass
+	
