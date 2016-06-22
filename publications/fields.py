@@ -7,7 +7,6 @@ from django.forms import widgets
 from django.db.models import ManyToManyField, Field
 from django.db.models.signals import post_save, m2m_changed
 import re
-import publications.models
 
 class PagesWidget(widgets.MultiWidget):
 	def __init__(self, *args, **kwargs):
@@ -120,6 +119,8 @@ class CitationsField(ManyToManyField):
 		return name, path, args + [self.text_field_name], kwargs
 
 	def contribute_to_class(self, cls, name):
+		from publications.models import Publication
+		
 		ManyToManyField.contribute_to_class(self, cls, name)
 		
 		# Connect a post_save signal that will handle regular calls of the save() method
@@ -137,7 +138,7 @@ class CitationsField(ManyToManyField):
 		# when a Publication object changes.
 		if not CitationsField._publication_save_listener_connected:
 			# This is required only once, not for each instance of CitationField
-			post_save.connect(self._publication_saved, sender=publications.models.Publication)
+			post_save.connect(self._publication_saved, sender=Publication)
 			CitationsField._publication_save_listener_connected = True
 
 	def _m2m_changed(self, sender, instance, action, **kwargs):
@@ -177,6 +178,8 @@ class CitationsField(ManyToManyField):
 			self._is_updating_m2m = False
 		
 	def _update_citations(self, instance):
+		from publications.models import Publication, Citation
+		
 		text = getattr(instance, self.text_field_name)
 		manager = getattr(instance, self.name)
 		
@@ -193,28 +196,30 @@ class CitationsField(ManyToManyField):
 			pub = None
 			
 			# We use the first Publication with a matching citekey
-			db_pubs = publications.models.Publication.objects.filter(citekey=key)
+			db_pubs = Publication.objects.filter(citekey=key)
 			if db_pubs:
 				pub = db_pubs.first()
 			
-			citation = publications.models.Citation(citekey=key, field_name=self.text_field_name, publication=pub)
+			citation = Citation(citekey=key, field_name=self.text_field_name, publication=pub)
 			citation.save()
 			citations.append(citation)
 		# Add all citations in one go
 		manager.add(*citations)
 
 	def _publication_saved(self, instance, **kwargs):
+		from publications.models import Citation
+		
 		# When a publication changes, we change Citation instances that point to it via their citekey.
 		
 		publication = instance
 		# Update those citations that point to this publication but whose
 		# citekey does no longer match. Set their publication to None.
 		# (Note: qs.update() does not call Citation.save() and does not emit signals).
-		publications.models.Citation.objects.filter(publication=publication).exclude(citekey=publication.citekey).update(publication=None)
+		Citation.objects.filter(publication=publication).exclude(citekey=publication.citekey).update(publication=None)
 
 		# Update those citations that have a matching citekey but which
 		# don't point to the correct publication.
-		publications.models.Citation.objects.filter(citekey=publication.citekey).exclude(publication=publication).update(publication=publication)
+		Citation.objects.filter(citekey=publication.citekey).exclude(publication=publication).update(publication=publication)
 
 try:
 	from south.modelsinspector import add_introspection_rules
