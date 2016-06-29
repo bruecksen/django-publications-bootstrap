@@ -58,7 +58,7 @@ class Publication(models.Model):
 	title = models.CharField(max_length=512)
 	authors = models.CharField(max_length=2048,
 		help_text='List of authors separated by commas or <i>and</i>.')
-	year = models.PositiveIntegerField(max_length=4)
+	year = models.PositiveIntegerField()
 	month = models.IntegerField(choices=MONTH_CHOICES, blank=True, null=True)
 	journal = models.CharField(max_length=256, blank=True)
 	book_title = models.CharField(max_length=256, blank=True)
