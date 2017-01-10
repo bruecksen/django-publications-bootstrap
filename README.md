@@ -33,6 +33,7 @@ Requirements
 * Django >= 1.5.0
 * Pillow >= 2.4.0
 * bibtexparser >= 0.5.5
+* django-countries >= 4.0
 
 Installation
 ------------

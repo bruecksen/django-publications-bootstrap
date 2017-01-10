@@ -139,14 +139,18 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 			keys = [
 				'journal',
 				'booktitle',
-				'publisher',
-				'institution',
 				'address',
+				'publisher',
+				'editor',
+				'edition',
+				'institution',
+				'school',
+				'organization',
+				'series',
 				'url',
 				'doi',
 				'isbn',
 				'keywords',
-				'pages',
 				'note',
 				'abstract',
 				'month']
@@ -194,28 +198,41 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 			if isinstance(entry['number'], six.text_type):
 				entry['number'] = int(re.sub('[^0-9]', '', entry['number']))
 
+			for field in ['chapter', 'section']:
+				entry[field] = entry.get(field, None)
+
 			# remove whitespace characters (likely due to line breaks)
 			entry['url'] = re.sub(r'\s', '', entry['url'])
 
 			publication_data = dict(type_id=type_id,
-				title=unicode(entry['title']),
-				authors=unicode(authors),
+				citekey=entry['key'],
+				title=entry['title'],
+				authors=authors,
 				year=entry['year'],
 				month=entry['month'],
-				journal=unicode(entry['journal']),
-				book_title=unicode(entry['booktitle']),
-				publisher=unicode(entry['publisher']),
-				institution=unicode(entry['institution']),
+				journal=entry['journal'],
+				book_title=entry['booktitle'],
+				publisher=entry['publisher'],
 				location=entry['address'],
+				editor=entry['editor'],
+				edition=entry['edition'],
+				institution=entry['institution'],
+				school=entry['school'],
+				organization=entry['organization'],
+				series=entry['series'],
 				volume=entry['volume'],
 				number=entry['number'],
 				pages=entry['pages'],
-				note=unicode(entry['note']),
-				url=unicode(entry['url']),
-				doi=unicode(entry['doi']),
-				isbn=unicode(entry['isbn']),
-				abstract=unicode(entry['abstract']),
-				keywords=unicode(u', '.join(entry['keywords'])))
+				chapter=entry['chapter'],
+				section=entry['section'],
+				note=entry['note'],
+				url=entry['url'],
+				doi=entry['doi'],
+				isbn=entry['isbn'],
+				external=False,
+				abstract=entry['abstract'],
+				keywords=u', '.join(entry['keywords']),
+				status=Publication.PUBLISHED)
 
 			publication = Publication(**publication_data)
 

@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
+
 __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__author__ = 'Lucas Theis <lucas@theis.io> and Christian Glodt <chris@mind.lu>'
+__authors__ = ['Lucas Theis <lucas@theis.io>, Christian Glodt <chris@mind.lu>', 'Marc Bourqui']
 __docformat__ = 'epytext'
 
 from django import forms
@@ -13,7 +15,9 @@ import sys
 class PagesWidget(widgets.MultiWidget):
     def __init__(self, *args, **kwargs):
         attrs = {'style': 'width: 40px; text-align: center;'}
-        forms.widgets.MultiWidget.__init__(self, [widgets.TextInput(attrs), widgets.TextInput(attrs)], *args, **kwargs)
+        forms.widgets.MultiWidget.__init__(self,
+                                           [widgets.TextInput(attrs), widgets.TextInput(attrs)],
+                                           *args, **kwargs)
 
     def format_output(self, rendered_widgets):
         to = ' <span style="vertical-align: middle;">to</span> '
@@ -58,6 +62,7 @@ class PagesField(Field):
 
     def get_internal_type(self):
         return 'CharField'
+
 
 def latex_citekey_extractor(latex):
     if not latex:
@@ -245,3 +250,21 @@ try:
     add_introspection_rules([([CitationsField], [], { 'text_field_name' : ('text_field_name', {}) })], ["^publications\.fields\.CitationsField"])
 except:
     pass
+
+
+class NullCharField(models.CharField):
+    """
+    Allows to apply the unique condition even if no value is set.
+    Adapted from U{http://stackoverflow.com/a/33525694}
+    U{Issue #4136<https://code.djangoproject.com/ticket/4136>} fixed in U{PR #6624<
+    https://github.com/django/django/pull/6624>}
+    Fixed in U{Django 1.11<https://docs.djangoproject.com/en/dev/releases/1.11/#miscellaneous>}
+    """
+    description = "CharField that stores NULL instead of empty strings"
+
+    def get_db_prep_value(self, value, connection=None, prepared=False):
+        value = super(NullCharField, self).get_db_prep_value(value, connection, prepared)
+        if value == "":
+            return None
+        else:
+            return value

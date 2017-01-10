@@ -3,10 +3,8 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 import re
-import publications.six as six
-from django.shortcuts import render
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponseRedirect
 from django.db import transaction
 from publications.models import Publication, Type
@@ -14,18 +12,19 @@ from publications.utils import import_bibtex as do_import_bibtex
 
 # mapping of months
 MONTHS = {
-	'jan': 1, 'january': 1,
-	'feb': 2, 'february': 2,
-	'mar': 3, 'march': 3,
-	'apr': 4, 'april': 4,
-	'may': 5,
-	'jun': 6, 'june': 6,
-	'jul': 7, 'july': 7,
-	'aug': 8, 'august': 8,
-	'sep': 9, 'september': 9,
-	'oct': 10, 'october': 10,
-	'nov': 11, 'november': 11,
-	'dec': 12, 'december': 12}
+    'jan': 1, 'january': 1,
+    'feb': 2, 'february': 2,
+    'mar': 3, 'march': 3,
+    'apr': 4, 'april': 4,
+    'may': 5,
+    'jun': 6, 'june': 6,
+    'jul': 7, 'july': 7,
+    'aug': 8, 'august': 8,
+    'sep': 9, 'september': 9,
+    'oct': 10, 'october': 10,
+    'nov': 11, 'november': 11,
+    'dec': 12, 'december': 12}
+
 
 def import_bibtex(request):
 	if request.method == 'POST':
@@ -62,5 +61,6 @@ def import_bibtex(request):
 					'title': 'Import BibTex',
 					'types': Type.objects.all(),
 					'request': request})
+
 
 import_bibtex = staff_member_required(import_bibtex)
