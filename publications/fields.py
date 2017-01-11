@@ -6,7 +6,7 @@ from django import forms
 from django.forms import widgets
 from django.db.models import ManyToManyField, Field
 from django.db.models.signals import post_save, m2m_changed
-import re
+import re, os
 
 class PagesWidget(widgets.MultiWidget):
 	def __init__(self, *args, **kwargs):
@@ -146,6 +146,15 @@ class CitationsField(ManyToManyField):
 		if self._is_updating_m2m:
 			return
 
+		# Don't do anything if the object is saved due to loading a fixture.
+		# Note: this check does not work yet because of https://code.djangoproject.com/ticket/27380
+		if kwargs.get('raw', False):
+			return
+
+		# Allow overriding signal handling when loading fixtures from the command line
+		if os.environ.get('DJANGO_PUBLICATIONS_IGNORE_SIGNALS', False):
+			return
+
 		if action == 'pre_clear':
 			# This signal happens after post_save, when the m2m field is about
 			# to be rewritten with form data. We delete Citation instances,
@@ -169,6 +178,10 @@ class CitationsField(ManyToManyField):
 	def _instance_saved(self, instance, **kwargs):
 		# Prevent infinite recursion due to being notified of our own changes.
 		if self._is_updating_m2m:
+			return
+
+		# Don't do anything if the object is saved due to loading a fixture.
+		if kwargs.get('raw', False):
 			return
 		
 		try:
@@ -207,6 +220,10 @@ class CitationsField(ManyToManyField):
 		manager.add(*citations)
 
 	def _publication_saved(self, instance, **kwargs):
+		# Don't do anything if the object is saved due to loading a fixture.
+		if kwargs.get('raw', False):
+			return		
+
 		from publications.models import Citation
 		
 		# When a publication changes, we change Citation instances that point to it via their citekey.
