@@ -8,6 +8,7 @@ from publications.models import Publication, Type
 from bibtexparser.bparser import BibTexParser
 from bibtexparser.customization import author, keyword
 from django.forms.models import model_to_dict
+from django_countries import countries
 
 import re
 import publications.six as six
@@ -26,6 +27,15 @@ MONTHS = {
 	'oct': 10, 'october': 10,
 	'nov': 11, 'november': 11,
 	'dec': 12, 'december': 12}
+
+COUNTRIES_BY_CODE = dict(countries)
+# Reversed dict
+try:
+    # Python 3+
+    COUNTRIES_BY_NAME = {v: k for k, v in COUNTRIES_BY_CODE.iteritems()}
+except:
+    # Python 2.7.x
+    COUNTRIES_BY_NAME = {v: k for k, v in COUNTRIES_BY_CODE.items()}
 
 special_chars = (
 	(r'\"{a}', 'ä'), (r'{\"a}', 'ä'), (r'\"a', 'ä'), (r'H{a}', 'ä'),
@@ -140,6 +150,7 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 				'journal',
 				'booktitle',
 				'address',
+				'country',
 				'publisher',
 				'editor',
 				'edition',
@@ -204,6 +215,16 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 			# remove whitespace characters (likely due to line breaks)
 			entry['url'] = re.sub(r'\s', '', entry['url'])
 
+			if 'country' not in entry:
+				entry['country'] = ''
+			else:
+				if entry['country'].strip() in COUNTRIES_BY_NAME:
+					entry['country'] = COUNTRIES_BY_NAME[entry['country'].strip()]
+				elif entry['country'].upper() in COUNTRIES_BY_CODE:
+					entry['country'] = entry['country'].upper()
+				else:
+					entry['country'] = ''
+
 			publication_data = dict(type_id=type_id,
 				citekey=entry['key'],
 				title=entry['title'],
@@ -214,6 +235,7 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 				book_title=entry['booktitle'],
 				publisher=entry['publisher'],
 				location=entry['address'],
+				country=entry['country'],
 				editor=entry['editor'],
 				edition=entry['edition'],
 				institution=entry['institution'],
