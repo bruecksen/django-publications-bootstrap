@@ -246,7 +246,7 @@ class CitationsField(ManyToManyField):
 
 try:
     from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^publications-bootstrap\.fields\.PagesField"])
+    add_introspection_rules([], ["^publications_bootstrap\.fields\.PagesField"])
     add_introspection_rules([([CitationsField], [], { 'text_field_name' : ('text_field_name', {}) })], ["^publications\.fields\.CitationsField"])
 except:
     pass

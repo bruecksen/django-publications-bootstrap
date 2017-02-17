@@ -7,8 +7,7 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponseRedirect
 from django.db import transaction
-from publications.models import Publication, Type
-from publications.utils import import_bibtex as do_import_bibtex
+from ..models import Publication, Type
 
 # mapping of months
 MONTHS = {
@@ -57,7 +56,7 @@ def import_bibtex(request):
 	else:
 	    return render(
 			request,
-					'admin/publications-bootstrap/import_bibtex.html', {
+					'admin/publications_bootstrap/import_bibtex.html', {
 					'title': 'Import BibTex',
 					'types': Type.objects.all(),
 					'request': request})
