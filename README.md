@@ -1,11 +1,9 @@
-django-publications
-===================
+<!--[![Build Status](https://travis-ci.org/lucastheis/django-publications.svg?branch=v0.7.0)](https://travis-ci.org/lucastheis/django-publications)-->
+<!--[![Coverage Status](https://coveralls.io/repos/github/lucastheis/django-publications/badge.svg)](https://coveralls.io/github/lucastheis/django-publications)-->
 
-A Django app for managing scientific publications.
+# django-publications
 
-
-[![Build Status](https://travis-ci.org/lucastheis/django-publications.svg?branch=v0.7.0)](https://travis-ci.org/lucastheis/django-publications)
-[![Coverage Status](https://coveralls.io/repos/github/lucastheis/django-publications/badge.svg)](https://coveralls.io/github/lucastheis/django-publications)
+A Django app for managing scientific publications, providing a Bootstrap-powered UI.
 
 
 Screenshots
@@ -41,19 +39,19 @@ Requirements
 * Pillow >= 2.4.0
 * bibtexparser >= 0.5.5
 * django-countries >= 4.0
-* Bootstrap v4.0.0-alpha.5
+* Bootstrap v4.0.0-alpha.6
 
 
 Installation
 ------------
 
-1. Run `pip install django-publications`.
+1. Run `pip install django-publications-bootstrap`.
 
-1. Add `'publications'` to `INSTALLED_APPS` in your project's `settings.py`.
+1. Add `publications-bootstrap` to the `INSTALLED_APPS` in your project's settings (usually `settings.py`).
 
 1. Add the following to your project's `urls.py`:
 
-        url(r'^publications/', include('publications.urls')),
+        url(r'^publications/', include('publications_bootstrap.urls')),
 
 1. In your project's base template, make sure the following blocks are available in the `<head>` tag:
   * `head`, to provide xml content
