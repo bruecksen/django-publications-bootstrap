@@ -25,7 +25,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'Django>=1.8.17',
+        'Django>=1.8.18',
         'Pillow>=2.4.0',
         'bibtexparser>=0.5.5',
         'django-countries>=4.0',
@@ -33,12 +33,9 @@ setup(
     zip_safe=False,
     keywords='django scientific publications citations references bibliography',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
-        'Framework :: Django :: 1.5',
-        'Framework :: Django :: 1.6',
-        'Framework :: Django :: 1.7',
         'Framework :: Django :: 1.8',
         'Framework :: Django :: 1.9',
         'Framework :: Django :: 1.10',
