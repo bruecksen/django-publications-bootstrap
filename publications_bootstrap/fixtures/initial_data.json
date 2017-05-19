@@ -121,7 +121,7 @@
 		}
 	},
 	{
-	"model": "publications_bootstrap.list",
+	"model": "publications_bootstrap.catalog",
 	"pk": 1,
 		"fields": {
 			"title": "Highlights",
