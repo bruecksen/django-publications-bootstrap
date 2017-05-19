@@ -15,9 +15,7 @@ import sys
 class PagesWidget(widgets.MultiWidget):
     def __init__(self, *args, **kwargs):
         attrs = {'style': 'width: 40px; text-align: center;'}
-        forms.widgets.MultiWidget.__init__(self,
-                                           [widgets.TextInput(attrs), widgets.TextInput(attrs)],
-                                           *args, **kwargs)
+        forms.widgets.MultiWidget.__init__(self, [widgets.TextInput(attrs), widgets.TextInput(attrs)], *args, **kwargs)
 
     def format_output(self, rendered_widgets):
         to = ' <span style="vertical-align: middle;">to</span> '
@@ -26,7 +24,6 @@ class PagesWidget(widgets.MultiWidget):
     def decompress(self, value):
         if value:
             values = value.split('-')
-
             if len(values) > 1:
                 return values
             if len(values) > 0:
@@ -38,9 +35,7 @@ class PagesForm(forms.MultiValueField):
     widget = PagesWidget
 
     def __init__(self, *args, **kwargs):
-        forms.MultiValueField.__init__(self, [
-            forms.CharField(),
-            forms.CharField()], *args, **kwargs)
+        forms.MultiValueField.__init__(self, [forms.CharField(), forms.CharField()], *args, **kwargs)
 
     def compress(self, data_list):
         if data_list:
