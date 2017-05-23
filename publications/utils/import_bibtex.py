@@ -31,10 +31,10 @@ MONTHS = {
 COUNTRIES_BY_CODE = dict(countries)
 # Reversed dict
 try:
-    # Python 3+
+    # Python 2.7.x
     COUNTRIES_BY_NAME = {v: k for k, v in COUNTRIES_BY_CODE.iteritems()}
 except:
-    # Python 2.7.x
+    # Python 3+
     COUNTRIES_BY_NAME = {v: k for k, v in COUNTRIES_BY_CODE.items()}
 
 special_chars = (
@@ -171,7 +171,7 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 					entry[key] = u''
 
 			# map month
-			entry['month'] = MONTHS.get(entry['month'].lower(), 0)
+			entry['month'] = Publication.EMonths.get(MONTHS.get(entry['month'].lower(), 0), None)
 
 			# determine type
 			type_id = None
