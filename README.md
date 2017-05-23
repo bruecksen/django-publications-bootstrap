@@ -41,6 +41,8 @@ A Django app for managing scientific publications, providing a Bootstrap-powered
 * Pillow >= 2.4.0
 * bibtexparser >= 0.5.5
 * `django-countries` >= 4.0
+* django-ordered-model >= 1.4.1
+* six >= 1.10.0
 * Bootstrap v4.0.0-alpha.6
 
 
