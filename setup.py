@@ -25,7 +25,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'Django>=1.8.18',
+        'Django>=1.9.13',
         'Pillow>=2.4.0',
         'bibtexparser>=0.5.5',
         'django-countries>=4.0',
