@@ -52,13 +52,13 @@ class Publication(models.Model):
         ACCEPTED = ('a', _('accepted'))
         PUBLISHED = ('p', _('published'))
 
-    type = models.ForeignKey(Type)
-    citekey = NullCharField(max_length=512, blank=True, null=True, unique=True,
+    type = models.ForeignKey(Type, db_index=True)
+    citekey = NullCharField(max_length=512, blank=True, null=True, unique=True, db_index=True,
                             help_text='BibTex citation key. Leave blank if unsure.')
-    title = models.TextField()
+    title = models.TextField(db_index=True)
     authors = models.TextField(help_text='List of authors separated by commas or <i>and</i>.')
-    year = models.PositiveIntegerField()
-    month = make_echoicefield(EMonths, blank=True, null=True)
+    year = models.PositiveIntegerField(db_index=True)
+    month = make_echoicefield(EMonths, blank=True, null=True, db_index=True)
     journal = models.TextField(blank=True)
     book_title = models.TextField(blank=True,
                                   help_text='Title of a book, part of which is being cited. See '
@@ -111,7 +111,7 @@ class Publication(models.Model):
     pdf = models.FileField(upload_to='publications_bootstrap/', verbose_name='PDF', blank=True, null=True)
     image = models.ImageField(upload_to='publications_bootstrap/images/', blank=True, null=True)
     thumbnail = models.ImageField(upload_to='publications_bootstrap/thumbnails/', blank=True, null=True)
-    external = models.BooleanField(default=False,
+    external = models.BooleanField(default=False, db_index=True,
                                    help_text='If publication was written in another lab, mark as external.')
     abstract = models.TextField(blank=True)
     doi = models.TextField(verbose_name='DOI', blank=True, null=True, unique=True)
