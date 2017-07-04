@@ -19,9 +19,6 @@ class Tests(TestCase):
     fixtures = ['initial_data.json', 'test_data.json']
     urls = 'publications_bootstrap.tests.urls'
 
-    def setUp(self):
-        User.objects.create_superuser('admin', 'admin@test.de', 'admin')
-
     def test_authors(self):
         publication = Publication.objects.create(
             type=Type.objects.get(pk=1),
@@ -207,28 +204,6 @@ class Tests(TestCase):
         self.assertTrue('C. Common' in str(response.content))
         self.assertFalse('B. Common' in str(response.content))
 
-    def test_bibtex_import(self):
-        self.client.login(username='admin', password='admin')
-
-        count = Publication.objects.count()
-        self.client.post('/admin/publications_bootstrap/publication/import_bibtex/',
-                         {'bibliography': TEST_BIBLIOGRAPHY}, follow=False)
-
-        self.assertEqual(Publication.objects.count() - count, TEST_BIBLIOGRAPHY_COUNT)
-
-        publications = Publication.objects.filter(citekey='test:2009')
-
-        self.assertEqual(len(publications), 1)
-        self.assertTrue('F. Last-Name' in publications[0].authors_list)
-        self.assertTrue('P. van der Markt III' in publications[0].authors_list)
-        self.assertTrue('Test' in publications[0].authors_list)
-        self.assertTrue('C. F. Gauss II' in publications[0].authors_list)
-
-        publications = Publication.objects.filter(citekey='kay2015good')
-
-        self.assertEqual(len(publications), 1)
-        self.assertTrue(publications[0].title.startswith('How Good is 85%?'))
-
     def test_unapi(self):
         self.assertEqual(self.client.get('/publications/unapi/').status_code, 200)
         self.assertEqual(self.client.get('/publications/unapi/?id=1').status_code, 200)
@@ -238,14 +213,47 @@ class Tests(TestCase):
         self.assertEqual(self.client.get('/publications/unapi/?id=99999&format=bibtex').status_code, 404)
         self.assertEqual(self.client.get('/publications/unapi/?id=1&format=foobar').status_code, 406)
 
-    def test_admin(self):
+
+class AdminTests(TestCase):
+    fixtures = ['initial_data.json', 'test_data.json']
+
+    def setUp(self):
+        User.objects.create_superuser('admin', 'admin@test.de', 'admin')
         self.client.login(username='admin', password='admin')
 
+    def test_basics(self):
         self.assertEqual(self.client.get('/publications/').status_code, 200)
+        self.assertEqual(self.client.get('/admin/publications_bootstrap/').status_code, 200)
+
+    def test_type_list(self):
+        self.assertEqual(self.client.get('/admin/publications_bootstrap/type/').status_code, 200)
         self.assertEqual(self.client.get('/admin/publications_bootstrap/type/6/move-up/', follow=True).status_code, 200)
         self.assertEqual(self.client.get('/admin/publications_bootstrap/type/6/move-down/', follow=True).status_code,
                          200)
 
+    def test_type_change(self):
+        self.assertEqual(self.client.get('/admin/publications_bootstrap/type/1/change/').status_code, 200)
+        # TODO: assert content
+
+    def test_catalog_list(self):
+        res = self.client.get('/admin/publications_bootstrap/catalog/')
+        self.assertEqual(res.status_code, 200)
+        self.assertInHTML("""<th scope="col"  class="column-publications_count">
+    <div class="text"><span>Publications</span></div><div class="clear"></div></th>""", res.rendered_content)
+        self.assertInHTML(
+            """<tr class="row1">
+    <td class="action-checkbox"><input type="checkbox" name="_selected_action" value="1" class="action-select" /></td>
+    <th class="field-title"><a href="/admin/publications_bootstrap/catalog/1/change/">Highlights</a></th>
+    <td class="field-description">Highlights</td><td class="field-publications_count">0 publications</td></tr>""",
+            res.rendered_content)
+
+    def test_catalog_change(self):
+        res = self.client.get('/admin/publications_bootstrap/catalog/1/change/')
+        self.assertEqual(res.status_code, 200)
+        # TODO: assert content
+
+    def test_publications_list(self):
+        self.assertEqual(self.client.get('/admin/publications_bootstrap/publication/').status_code, 200)
         # Test admin actions
         from django.contrib.admin import ACTION_CHECKBOX_NAME
         change_url = reverse('admin:publications_bootstrap_publication_changelist')
@@ -274,113 +282,142 @@ class Tests(TestCase):
                 self.assertContains(response, '1 publication was successfully marked as ',
                                     msg_prefix="AssertionError in {}: ".format(action))
 
+    def test_publication_change(self):
+        res = self.client.get('/admin/publications_bootstrap/publication/1/change/')
+        self.assertEqual(res.status_code, 200)
+        self.assertInHTML("""<select name="Catalog_publications-0-catalog" id="id_Catalog_publications-0-catalog">
+    <option value="" selected>---------</option><option value="1">Highlights</option></select>""", res.rendered_content)
+        # TODO: assert more content
+
+    def test_bibtex_import(self):
+        self.client.login(username='admin', password='admin')
+
+        count = Publication.objects.count()
+        self.client.post('/admin/publications_bootstrap/publication/import_bibtex/',
+                         {'bibliography': TEST_BIBLIOGRAPHY}, follow=False)
+
+        self.assertEqual(Publication.objects.count() - count, TEST_BIBLIOGRAPHY_COUNT)
+
+        publications = Publication.objects.filter(citekey='test:2009')
+
+        self.assertEqual(len(publications), 1)
+        self.assertTrue('F. Last-Name' in publications[0].authors_list)
+        self.assertTrue('P. van der Markt III' in publications[0].authors_list)
+        self.assertTrue('Test' in publications[0].authors_list)
+        self.assertTrue('C. F. Gauss II' in publications[0].authors_list)
+
+        publications = Publication.objects.filter(citekey='kay2015good')
+
+        self.assertEqual(len(publications), 1)
+        self.assertTrue(publications[0].title.startswith('How Good is 85%?'))
 
 class TestExtras(TestCase):
-    fixtures = ['initial_data.json', 'test_data.json']
-    urls = 'publications_bootstrap.tests.urls'
+        fixtures = ['initial_data.json', 'test_data.json']
+        urls = 'publications_bootstrap.tests.urls'
 
-    def test_tex_parse(self):
-        # tex_parse is used to replace simple LaTeX code in publication titles
-        self.assertEqual(tex_parse(u'$L_p$-spherical'), u'L<sub>p</sub>-spherical')
-        self.assertEqual(tex_parse(u'$L^2$-spherical'), u'L<sup>2</sup>-spherical')
+        def test_tex_parse(self):
+            # tex_parse is used to replace simple LaTeX code in publication titles
+            self.assertEqual(tex_parse(u'$L_p$-spherical'), u'L<sub>p</sub>-spherical')
+            self.assertEqual(tex_parse(u'$L^2$-spherical'), u'L<sup>2</sup>-spherical')
 
-    def test_flatten_authors(self):
-        # Default values
-        tpl = Template("""{% load publication_extras %}{{ publication.authors_escaped|flatten_authors }}""")
-        ctx = dict(publication=Publication.objects.get(pk=1))
-        res = tpl.render(RequestContext(HttpRequest(), ctx))
-        self.assertEqual(res, """<a href="/publications/a.+s.+ecker/">A. S. Ecker</a>,
-<a href="/publications/p.+berens/">P. Berens</a>,
-<a href="/publications/r.+j.+cotton/">R. J. Cotton</a>,
-<a href="/publications/m.+subramaniyan/">M. Subramaniyan</a>,
-<a href="/publications/g.+h.+denfield/">G. H. Denfield</a>,
-<a href="/publications/c.+r.+cadwell/">C. R. Cadwell</a>,
-<a href="/publications/s.+m.+smirnakis/">S. M. Smirnakis</a>,
-<a href="/publications/m.+bethge/">M. Bethge</a>,&nbsp;<i>et al.</i>""")
-        # Provide limit
-        tpl = Template("""{% load publication_extras %}{{ publication.authors_escaped|flatten_authors:"limit=3" }}""")
-        ctx = dict(publication=Publication.objects.get(pk=1))
-        res = tpl.render(RequestContext(HttpRequest(), ctx))
-        self.assertEqual(res, """<a href="/publications/a.+s.+ecker/">A. S. Ecker</a>,
-<a href="/publications/p.+berens/">P. Berens</a>,
-<a href="/publications/r.+j.+cotton/">R. J. Cotton</a>,&nbsp;<i>et al.</i>""")
-        # Ignore provided special last author separator
-        tpl = Template(
-            """{% load publication_extras %}{{ publication.authors_escaped|flatten_authors:"last=, and" }}""")
-        ctx = dict(publication=Publication.objects.get(pk=1))
-        res = tpl.render(RequestContext(HttpRequest(), ctx))
-        self.assertEqual(res, """<a href="/publications/a.+s.+ecker/">A. S. Ecker</a>,
-<a href="/publications/p.+berens/">P. Berens</a>,
-<a href="/publications/r.+j.+cotton/">R. J. Cotton</a>,
-<a href="/publications/m.+subramaniyan/">M. Subramaniyan</a>,
-<a href="/publications/g.+h.+denfield/">G. H. Denfield</a>,
-<a href="/publications/c.+r.+cadwell/">C. R. Cadwell</a>,
-<a href="/publications/s.+m.+smirnakis/">S. M. Smirnakis</a>,
-<a href="/publications/m.+bethge/">M. Bethge</a>,&nbsp;<i>et al.</i>""")
-        # Provide special last author separator and corner case limit
-        tpl = Template(
-            """{% load publication_extras %}{{ publication.authors_escaped|flatten_authors:"limit=6&last=, and" }}""")
-        ctx = dict(publication=Publication.objects.get(pk=2))
-        res = tpl.render(RequestContext(HttpRequest(), ctx))
-        self.assertEqual(res, """<a href="/publications/a.+chagas/">A. Chagas</a>,
-<a href="/publications/l.+theis/">L. Theis</a>,
-<a href="/publications/b.+sengupta/">B. Sengupta</a>,
-<a href="/publications/m.+st%C3%BCttgen/">M. Stüttgen</a>,
-<a href="/publications/m.+bethge/">M. Bethge</a>, and
-<a href="/publications/c.+schwarz/">C. Schwarz</a>""")
-        # Provide separator, limit and et_al
-        tpl = Template(
-            """{% load publication_extras %}{% with et_al="&nbsp;<b>et al.</b>"|urlencode %}{% with args="limit=4&separator= and&et_al="|add:et_al %}{{ publication.authors_escaped|flatten_authors:args }}{% endwith %}{% endwith %}""")
-        ctx = dict(publication=Publication.objects.get(pk=2))
-        res = tpl.render(RequestContext(HttpRequest(), ctx))
-        self.assertEqual(res, """<a href="/publications/a.+chagas/">A. Chagas</a> and
-<a href="/publications/l.+theis/">L. Theis</a> and
-<a href="/publications/b.+sengupta/">B. Sengupta</a> and
-<a href="/publications/m.+st%C3%BCttgen/">M. Stüttgen</a>&nbsp;<b>et al.</b>""")
+        def test_flatten_authors(self):
+            # Default values
+            tpl = Template("""{% load publication_extras %}{{ publication.authors_escaped|flatten_authors }}""")
+            ctx = dict(publication=Publication.objects.get(pk=1))
+            res = tpl.render(RequestContext(HttpRequest(), ctx))
+            self.assertEqual(res, """<a href="/publications/a.+s.+ecker/">A. S. Ecker</a>,
+    <a href="/publications/p.+berens/">P. Berens</a>,
+    <a href="/publications/r.+j.+cotton/">R. J. Cotton</a>,
+    <a href="/publications/m.+subramaniyan/">M. Subramaniyan</a>,
+    <a href="/publications/g.+h.+denfield/">G. H. Denfield</a>,
+    <a href="/publications/c.+r.+cadwell/">C. R. Cadwell</a>,
+    <a href="/publications/s.+m.+smirnakis/">S. M. Smirnakis</a>,
+    <a href="/publications/m.+bethge/">M. Bethge</a>,&nbsp;<i>et al.</i>""")
+            # Provide limit
+            tpl = Template(
+                """{% load publication_extras %}{{ publication.authors_escaped|flatten_authors:"limit=3" }}""")
+            ctx = dict(publication=Publication.objects.get(pk=1))
+            res = tpl.render(RequestContext(HttpRequest(), ctx))
+            self.assertEqual(res, """<a href="/publications/a.+s.+ecker/">A. S. Ecker</a>,
+    <a href="/publications/p.+berens/">P. Berens</a>,
+    <a href="/publications/r.+j.+cotton/">R. J. Cotton</a>,&nbsp;<i>et al.</i>""")
+            # Ignore provided special last author separator
+            tpl = Template(
+                """{% load publication_extras %}{{ publication.authors_escaped|flatten_authors:"last=, and" }}""")
+            ctx = dict(publication=Publication.objects.get(pk=1))
+            res = tpl.render(RequestContext(HttpRequest(), ctx))
+            self.assertEqual(res, """<a href="/publications/a.+s.+ecker/">A. S. Ecker</a>,
+    <a href="/publications/p.+berens/">P. Berens</a>,
+    <a href="/publications/r.+j.+cotton/">R. J. Cotton</a>,
+    <a href="/publications/m.+subramaniyan/">M. Subramaniyan</a>,
+    <a href="/publications/g.+h.+denfield/">G. H. Denfield</a>,
+    <a href="/publications/c.+r.+cadwell/">C. R. Cadwell</a>,
+    <a href="/publications/s.+m.+smirnakis/">S. M. Smirnakis</a>,
+    <a href="/publications/m.+bethge/">M. Bethge</a>,&nbsp;<i>et al.</i>""")
+            # Provide special last author separator and corner case limit
+            tpl = Template(
+                """{% load publication_extras %}{{ publication.authors_escaped|flatten_authors:"limit=6&last=, and" }}""")
+            ctx = dict(publication=Publication.objects.get(pk=2))
+            res = tpl.render(RequestContext(HttpRequest(), ctx))
+            self.assertEqual(res, """<a href="/publications/a.+chagas/">A. Chagas</a>,
+    <a href="/publications/l.+theis/">L. Theis</a>,
+    <a href="/publications/b.+sengupta/">B. Sengupta</a>,
+    <a href="/publications/m.+st%C3%BCttgen/">M. Stüttgen</a>,
+    <a href="/publications/m.+bethge/">M. Bethge</a>, and
+    <a href="/publications/c.+schwarz/">C. Schwarz</a>""")
+            # Provide separator, limit and et_al
+            tpl = Template(
+                """{% load publication_extras %}{% with et_al="&nbsp;<b>et al.</b>"|urlencode %}{% with args="limit=4&separator= and&et_al="|add:et_al %}{{ publication.authors_escaped|flatten_authors:args }}{% endwith %}{% endwith %}""")
+            ctx = dict(publication=Publication.objects.get(pk=2))
+            res = tpl.render(RequestContext(HttpRequest(), ctx))
+            self.assertEqual(res, """<a href="/publications/a.+chagas/">A. Chagas</a> and
+    <a href="/publications/l.+theis/">L. Theis</a> and
+    <a href="/publications/b.+sengupta/">B. Sengupta</a> and
+    <a href="/publications/m.+st%C3%BCttgen/">M. Stüttgen</a>&nbsp;<b>et al.</b>""")
 
-    def test_get_publication(self):
-        tpl = Template("""{% load publication_extras %}{% get_publication 2 %}""")
-        res = tpl.render(RequestContext(HttpRequest()))
-        self.assertInHTML(
-            """<p class="card-text"> <a href="/publications/a.+chagas/">A. Chagas</a>, <a href="/publications/l.+theis/">L. Theis</a>, <a href="/publications/b.+sengupta/">B. Sengupta</a>, <a href="/publications/m.+st%C3%BCttgen/">M. Stüttgen</a>, <a href="/publications/m.+bethge/">M. Bethge</a>, and <a href="/publications/c.+schwarz/">C. Schwarz</a></p>""",
-            res)
-        self.assertInHTML(
-            """<a href="/publications/2/" class="title">Functional analysis of ultra high information rates conveyed by rat vibrissal primary afferents</a>""",
-            res)
-        tpl = Template("""{% load publication_extras %}{% get_publication 'ThisIsNoCitekey' %}""")
-        res = tpl.render(RequestContext(HttpRequest()))
-        self.assertInHTML(
-            """<div class="alert alert-info" role="alert"><h4 class="alert-heading">Sorry</h4><p>There are no publications.</p></div>""",
-            res)
+        def test_get_publication(self):
+            tpl = Template("""{% load publication_extras %}{% get_publication 2 %}""")
+            res = tpl.render(RequestContext(HttpRequest()))
+            self.assertInHTML(
+                """<p class="card-text"> <a href="/publications/a.+chagas/">A. Chagas</a>, <a href="/publications/l.+theis/">L. Theis</a>, <a href="/publications/b.+sengupta/">B. Sengupta</a>, <a href="/publications/m.+st%C3%BCttgen/">M. Stüttgen</a>, <a href="/publications/m.+bethge/">M. Bethge</a>, and <a href="/publications/c.+schwarz/">C. Schwarz</a></p>""",
+                res)
+            self.assertInHTML(
+                """<a href="/publications/2/" class="title">Functional analysis of ultra high information rates conveyed by rat vibrissal primary afferents</a>""",
+                res)
+            tpl = Template("""{% load publication_extras %}{% get_publication 'ThisIsNoCitekey' %}""")
+            res = tpl.render(RequestContext(HttpRequest()))
+            self.assertInHTML(
+                """<div class="alert alert-info" role="alert"><h4 class="alert-heading">Sorry</h4><p>There are no publications.</p></div>""",
+                res)
 
-    def test_get_publications(self):
-        tpl = Template("""{% load publication_extras %}{% get_publications %}""")
-        tpl.render(RequestContext(HttpRequest()))
-        # TODO: some assertions
+        def test_get_publications(self):
+            tpl = Template("""{% load publication_extras %}{% get_publications %}""")
+            tpl.render(RequestContext(HttpRequest()))
+            # TODO: some assertions
 
-    def test_get_catalog(self):
-        link = PublicationLink.objects.create(publication_id=1, description='Test', url='http://test.com')
-        link.save()
+        def test_get_catalog(self):
+            link = PublicationLink.objects.create(publication_id=1, description='Test', url='http://test.com')
+            link.save()
 
-        publication = Publication.objects.get(pk=1)
-        highlights_catalog = Catalog.objects.get(title__iexact='highlights')
+            publication = Publication.objects.get(pk=1)
+            highlights_catalog = Catalog.objects.get(title__iexact='highlights')
 
-        # add publication to catalog
-        publication.catalogs.add(highlights_catalog)
+            # add publication to catalog
+            highlights_catalog.publications.add(publication)
 
-        # Create empty Catalog
-        naughty_catalog = Catalog(title="Naughty")
-        naughty_catalog.save()
+            # Create empty Catalog
+            naughty_catalog = Catalog(title="Naughty")
+            naughty_catalog.save()
 
-        # render catalog
-        tpl = Template("""
-{% load publication_extras %}
-{% get_publication 1 %}
-{% get_catalog 'highlights' 'publications_bootstrap/components/publications_with_thumbnails.html' %}
-{% get_catalog 'naughty' %}
-{% get_catalog 'foobar' %}
-""")
-        self.assertGreater(len(tpl.render(RequestContext(HttpRequest())).strip()), 0)
+            # render catalog
+            tpl = Template("""
+    {% load publication_extras %}
+    {% get_publication 1 %}
+    {% get_catalog 'highlights' 'publications_bootstrap/components/publications_with_thumbnails.html' %}
+    {% get_catalog 'naughty' %}
+    {% get_catalog 'foobar' %}
+    """)
+            self.assertGreater(len(tpl.render(RequestContext(HttpRequest())).strip()), 0)
 
     def test_get_citation(self):
         tpl = Template("""{% load publication_extras %}{% get_citation 2 %}""")
@@ -473,7 +510,7 @@ Functional analysis of ultra high information rates conveyed by rat vibrissal pr
         pass
 
 
-TEST_BIBLIOGRAPHY_COUNT = 11
+TEST_BIBLIOGRAPHY_COUNT = 12
 TEST_BIBLIOGRAPHY = r"""
 @article{Bethge2002c,
   author = "M. Bethge and D. Rotermund and K. Pawelzik",

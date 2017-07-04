@@ -11,7 +11,7 @@ from echoices.enums import EChoice, EOrderedChoice
 from echoices.fields import make_echoicefield
 
 from ..fields import NullCharField, PagesField
-from ..models import Type, Catalog
+from ..models import Type
 
 if 'django.contrib.sites' in settings.INSTALLED_APPS:
     from django.contrib.sites.models import Site
@@ -117,7 +117,7 @@ class Publication(models.Model):
     doi = models.TextField(verbose_name='DOI', blank=True, null=True, unique=True)
     isbn = models.TextField(verbose_name='ISBN', blank=True, null=True, unique=True,
                          help_text='Only for a book.')  # A-B-C-D
-    catalogs = models.ManyToManyField(Catalog, blank=True)
+    # catalogs = models.ManyToManyField(Catalog, blank=True)
     status = make_echoicefield(EStatuses, default=EStatuses.PUBLISHED, blank=False)
 
     def __init__(self, *args, **kwargs):
