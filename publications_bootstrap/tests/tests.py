@@ -419,6 +419,27 @@ class TestExtras(TestCase):
     """)
             self.assertGreater(len(tpl.render(RequestContext(HttpRequest())).strip()), 0)
 
+        publication = Publication.objects.get(pk=1)
+        highlights_catalog = Catalog.objects.get(title__iexact='highlights')
+
+        # add publication to catalog
+        highlights_catalog.publications.add(publication)
+
+        # Create empty Catalog
+        naughty_catalog = Catalog(title="Naughty")
+        naughty_catalog.save()
+
+        # render catalog
+        tpl = Template("""
+{% load publication_extras %}
+{% get_publication 1 %}
+{% get_catalog 'highlights' 'publications_bootstrap/components/publications_with_thumbnails.html' %}
+{% get_catalog 'naughty' %}
+{% get_catalog 'foobar' %}
+""")
+
+        self.assertGreater(len(tpl.render(RequestContext(HttpRequest())).strip()), 0)
+
     def test_get_citation(self):
         tpl = Template("""{% load publication_extras %}{% get_citation 2 %}""")
         citation = tpl.render(RequestContext(HttpRequest()))
