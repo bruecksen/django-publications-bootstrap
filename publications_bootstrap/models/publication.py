@@ -55,6 +55,14 @@ class Publication(models.Model):
             # abbreviations used in BibTex
             self.bibtex = bibtex
 
+        def __str__(self):
+            """
+            use value as string representation,
+            otherwise loaddata does not work with data dumped with dumpdata
+            """
+            return str(self.value)
+
+
     # Status of the publication
     class EStatuses(EChoice):
         DRAFT = ('d', _('draft'))
