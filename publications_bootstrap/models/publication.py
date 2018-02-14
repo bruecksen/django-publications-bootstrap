@@ -52,7 +52,7 @@ class Publication(models.Model):
         ACCEPTED = ('a', _('accepted'))
         PUBLISHED = ('p', _('published'))
 
-    type = models.ForeignKey(Type, db_index=True)
+    type = models.ForeignKey(Type, db_index=True, on_delete=models.PROTECT)
     citekey = NullCharField(max_length=512, blank=True, null=True, unique=True, db_index=True,
                             help_text='BibTex citation key. Leave blank if unsure.')
     title = models.TextField(db_index=True)

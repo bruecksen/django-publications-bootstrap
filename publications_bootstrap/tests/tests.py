@@ -4,13 +4,18 @@ from distutils.version import StrictVersion
 
 import django
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 from django.template import Template, RequestContext
 from django.test import TestCase
 
 from ..models import Publication, Type, PublicationLink, Catalog
 from ..templatetags.publication_extras import tex_parse
+
+
+try:
+    from django.urls import reverse  # Django 1.10+
+except ImportError:
+    from django.core.urlresolvers import reverse
 
 warnings.simplefilter("always")
 
