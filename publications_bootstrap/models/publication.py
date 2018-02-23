@@ -357,7 +357,8 @@ class Publication(models.Model):
         if self.book_title and not self.journal:
             context_obj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:book')
             context_obj.append('rfr_id=info:sid/' + domain + ':' + rfr_id)
-            context_obj.append('rft_id=info:doi/' + urlquote_plus(self.doi))
+            if self.doi:
+                context_obj.append('rft_id=info:doi/' + urlquote_plus(self.doi))
 
             context_obj.append('rft.btitle=' + urlquote_plus(self.title))
 
@@ -367,7 +368,8 @@ class Publication(models.Model):
         else:
             context_obj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:journal')
             context_obj.append('rfr_id=info:sid/' + domain + ':' + rfr_id)
-            context_obj.append('rft_id=info:doi/' + urlquote_plus(self.doi))
+            if self.doi:
+                context_obj.append('rft_id=info:doi/' + urlquote_plus(self.doi))
             context_obj.append('rft.atitle=' + urlquote_plus(self.title))
 
             if self.journal:
