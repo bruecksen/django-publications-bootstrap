@@ -16,14 +16,16 @@
 
 {% block content %}
     <div class="pubo">
-        {% if publication or publications %}
-            {% include 'publications_bootstrap/components/download_all.html' %}
-            {% block pubo_content_page %}
-                {% include 'publications_bootstrap/components/section.html' %}
-            {% endblock pubo_content_page %}
-        {% else %}
-            {% include 'publications_bootstrap/components/empty.html' %}
-        {% endif %}
+        {% block app_content %}
+            {% if publication or publications %}
+                {% include 'publications_bootstrap/components/download_all.html' %}
+                {% block pubo_content_page %}
+                    {% include 'publications_bootstrap/components/section.html' %}
+                {% endblock pubo_content_page %}
+            {% else %}
+                {% include 'publications_bootstrap/components/empty.html' %}
+            {% endif %}
+        {% endblock %}
     </div>
 {% endblock content %}
 
