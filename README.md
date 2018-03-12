@@ -51,16 +51,22 @@ A Django app for managing scientific publications, providing a Bootstrap-powered
 
 ## Installation
 
+### Using [PyPI](https://pypi.python.org/pypi/django-publications-bootstrap)
 1. Run `pip install django-publications-bootstrap`.
 
-1. Add `publications-bootstrap` to the `INSTALLED_APPS` in your project's settings (usually `settings.py`).
+### Using the source code
+1. Make sure [`pandoc`](http://pandoc.org/index.html) is installed
+1. Run `./pypi_packager.sh`
+1. Run `pip install dist/django_publications_bootstrap-x.y.z-[...].wheel`, where `x.y.z` must be replaced by the actual
+   version number and `[...]` depends on your packaging configuration
 
+### Configuration
+1. Add `publications-bootstrap` to the `INSTALLED_APPS` in your project's settings (usually `settings.py`).
 1. Add the following to your project's `urls.py`:
 
         url(r'^publications/', include('publications_bootstrap.urls')),
 
 1. Run `./manage.py migrate publications_bootstrap`.
-
 1. In your project's base template, make sure the following blocks are available in the `<head>` tag:
     * `head`, to provide xml content
     * `css`, to provide CSS specific to this application
