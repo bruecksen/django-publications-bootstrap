@@ -5,12 +5,11 @@ from distutils.version import StrictVersion
 import django
 from django.contrib.auth.models import User
 from django.http import HttpRequest
-from django.template import Template, RequestContext
+from django.template import RequestContext, Template
 from django.test import TestCase
 
-from ..models import Publication, Type, PublicationLink, Catalog
+from ..models import Catalog, Publication, PublicationLink, Type
 from ..templatetags.publication_extras import tex_parse
-
 
 try:
     from django.urls import reverse  # Django 1.10+
@@ -133,6 +132,64 @@ class Tests(TestCase):
 
         self.assertEqual(self.client.get('/publications/').status_code, 200)
         self.assertEqual(self.client.get('/publications/1/').status_code, 200)
+
+    def test_z3988(self):
+        publication = Publication.objects.create(
+            type=Type.objects.get(pk=1),
+            authors=u'A. Unique and B. Common',
+            title=u'A story about z3988, doi & 100%!. Questions?',
+            book_title=u'A+ B/ Collection',
+            volume=u'abs/0000.0000',
+            publisher=u'Skeptical Publishing Inc. & Bros',
+            doi=u'00.0000/00000000.0000.00000000',
+            year=2014,
+            month=Publication.EMonths.OCT,
+            pages=u'5-66',
+            number=u'7',
+            isbn=u'000-0-0000-0000-0',
+            external=0)
+        publication.clean()
+        publication.save()
+
+        z3988 = publication.z3988()
+        # common
+        self.assertTrue('ctx_ver=Z39.88-2004' in z3988)
+        self.assertTrue('rfr_id=info:sid/example.com:example' in z3988)
+        self.assertTrue('rft.au=A.+Unique&rft.au=B.+Common' in z3988)
+
+        # if self.book_title and not self.journal:
+        self.assertTrue('rft_val_fmt=info:ofi/fmt:kev:mtx:book' in z3988)
+        self.assertTrue('rft_id=info:doi/00.0000%2F00000000.0000.00000000' in z3988)
+        self.assertTrue('rft.btitle=A+story+about+z3988%2C+doi+%26+100%25%21.+Questions%3F' in z3988)
+        self.assertTrue('rft.pub=Skeptical+Publishing+Inc.+%26+Bros' in z3988)
+        self.assertTrue('fmt:kev:mtx:journal' not in z3988)
+        self.assertTrue('rft.atitle=' not in z3988)
+        self.assertTrue('rft.jtitle=' not in z3988)
+        self.assertTrue('rft.pages=' not in z3988)
+        # if self.month:
+        self.assertTrue('rft.date=2014-10-1' in z3988)
+        # if self.isbn:
+        self.assertTrue('rft.isbn=000-0-0000-0000-0' in z3988)
+
+        publication.journal = u'Plain Paper Pipe Equation (PP|=)'
+        publication.doi = None
+        publication.month = None
+        publication.isbn = None
+        z3988 = publication.z3988()
+        # else (if self.book_title and not self.journal:)
+        self.assertTrue('rft_val_fmt=info:ofi/fmt:kev:mtx:journal' in z3988)
+        self.assertTrue('rft_id=info:doi/' not in z3988)
+        self.assertTrue('rft.atitle=A+story+about+z3988%2C+doi+%26+100%25%21.+Questions%3F' in z3988)
+        self.assertTrue('rft.jtitle=Plain+Paper+Pipe+Equation+%28PP%7C%3D%29' in z3988)
+        self.assertTrue('rft.volume=abs/0000.0000' in z3988)
+        self.assertTrue('rft.pages=5-66' in z3988)
+        self.assertTrue('fmt:kev:mtx:book' not in z3988)
+        self.assertTrue('rft.btitle=' not in z3988)
+        self.assertTrue('rft.pub=' not in z3988)
+        # else (if self.month:)
+        self.assertTrue('rft.date=2014' in z3988)
+        # if not self.isbn
+        self.assertTrue('rft.isbn=' not in z3988)
 
     def test_publications(self):
         publication = Publication.objects.create(
