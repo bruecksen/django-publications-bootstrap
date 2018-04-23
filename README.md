@@ -61,7 +61,7 @@ A Django app for managing scientific publications, providing a Bootstrap-powered
    version number and `[...]` depends on your packaging configuration
 
 ### Configuration
-1. Add `publications-bootstrap` to the `INSTALLED_APPS` in your project's settings (usually `settings.py`).
+1. Add `publications_bootstrap` to the `INSTALLED_APPS` in your project's settings (usually `settings.py`).
 1. Add the following to your project's `urls.py`:
 
         url(r'^publications/', include('publications_bootstrap.urls')),

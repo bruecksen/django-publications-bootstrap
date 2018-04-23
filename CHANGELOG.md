@@ -1,5 +1,8 @@
 # django-publications-bootstrap
 
+## 2.3.0 - 23.04.2018
+- Django 2.0 support
+
 ## 2.0.3 - 30.05.2017
 - Avoid RemovedInDjango20Warnings while testing
 - Support of Django 1.11
