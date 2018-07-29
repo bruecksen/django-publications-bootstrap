@@ -1,5 +1,22 @@
 # django-publications-bootstrap
 
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+
+## [Unreleased]
+- Support Bootstrap 3.3.7
+- Support Bootstrap 4.0
+- Replace methods with properties (see deprecation warnings)
+- Drop support of Django 1.10
+
+## [2.3.1] - 2018-07-29
+### Changed
+- Relax dependency on django-echoices at specific version
+
+### Removed
+- Support of Django 1.9 (deprecated since April 2017)
+
 ## 2.3.0 - 23.04.2018
 - Django 2.0 support
 
