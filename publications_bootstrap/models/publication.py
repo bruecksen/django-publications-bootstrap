@@ -53,7 +53,7 @@ class Publication(models.Model):
         PUBLISHED = ('p', _('published'))
 
     type = models.ForeignKey(Type, db_index=True, on_delete=models.PROTECT)
-    citekey = NullCharField(max_length=512, blank=True, null=True, unique=True, db_index=True,
+    citekey = NullCharField(max_length=255, blank=True, null=True, unique=True, db_index=True,
                             help_text='BibTex citation key. Leave blank if unsure.')
     title = models.TextField(db_index=True)
     authors = models.TextField(help_text='List of authors separated by commas or <i>and</i>.')
