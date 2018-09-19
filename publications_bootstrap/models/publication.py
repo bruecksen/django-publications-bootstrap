@@ -7,7 +7,7 @@ from django.db import models
 from django.utils.http import urlquote_plus
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
-from echoices.enums import EChoice, EOrderedChoice
+from echoices.enums import EChoice, EOrderedChoice, EChoiceMeta
 from echoices.fields import make_echoicefield
 
 from ..fields import NullCharField, PagesField
@@ -15,6 +15,15 @@ from ..models import Type
 
 if 'django.contrib.sites' in settings.INSTALLED_APPS:
     from django.contrib.sites.models import Site
+
+
+class EChoiceMetaInt(EChoiceMeta):
+    def __getitem__(cls, value):
+        try:
+            value = int(value)
+        except ValueError:
+            pass
+        return super().__getitem__(value)
 
 
 class Publication(models.Model):
@@ -27,7 +36,7 @@ class Publication(models.Model):
         app_label = 'publications_bootstrap'  # Fix for Django<1.7
 
     # names shown in admin area
-    class EMonths(EOrderedChoice):
+    class EMonths(EOrderedChoice, metaclass=EChoiceMetaInt):
         JAN = (1, _('January'), 'Jan')
         FEB = (2, _('February'), 'Feb')
         MAR = (3, _('March'), 'Mar')
@@ -45,12 +54,28 @@ class Publication(models.Model):
             # abbreviations used in BibTex
             self.bibtex = bibtex
 
+        def __str__(self):
+            """
+            use value as string representation,
+            otherwise loaddata does not work with data dumped with dumpdata
+            """
+            return str(self.value)
+
+
     # Status of the publication
     class EStatuses(EChoice):
         DRAFT = ('d', _('draft'))
         SUBMITTED = ('s', _('submitted'))
         ACCEPTED = ('a', _('accepted'))
         PUBLISHED = ('p', _('published'))
+
+        def __str__(self):
+            """
+            use value as string representation,
+            otherwise loaddata does not work with data dumped with dumpdata
+            """
+            return str(self.value)
+
 
     type = models.ForeignKey(Type, db_index=True, on_delete=models.PROTECT)
     citekey = NullCharField(max_length=255, blank=True, null=True, unique=True, db_index=True,
