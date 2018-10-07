@@ -56,34 +56,14 @@ class PublicationAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('type', 'title', 'authors', 'year', 'month', 'status', 'external')}),
-        ('All available fields (overridden if set below)', {
+        ('Edition', {
             'classes': ('collapse',),
             'fields': (
-                'book_title', 'publisher', 'editor', 'edition', 'institution', 'school', 'organization', 'location',
-                'country', 'volume', 'number', 'series', 'chapter', 'section', 'pages', 'url')}),
-        ('Journal', {
+                'book_title', 'journal', 'editor', 'organization', 'volume', 'number', 'series', 'edition',
+                'chapter', 'pages',)}),
+        ('Publishing', {
             'classes': ('collapse',),
-            'fields': ('journal', 'volume', 'number', 'pages')}),
-        ('Conference', {
-            'classes': ('collapse',),
-            'fields': (
-                'book_title', 'editor', 'volume', 'number', 'series', 'pages', 'location', 'country', 'organization',
-                'publisher')}),
-        ('Technical Report', {
-            'classes': ('collapse',),
-            'fields': ('institution', 'number', 'location', 'country')}),
-        ('Book or Manual', {
-            'classes': ('collapse',),
-            'fields': (
-                'editor', 'publisher', 'volume', 'number', 'series', 'organization', 'location', 'country',
-                'edition')}),
-        ('In Book or Collection', {
-            'classes': ('collapse',),
-            'fields': ('book_title', 'editor', 'chapter', 'pages', 'publisher', 'volume', 'number',
-                       'series', 'location', 'country', 'edition')}),
-        ('Thesis', {
-            'classes': ('collapse',),
-            'fields': ('school', 'location', 'country')}),
+            'fields': ('publisher', 'school', 'institution', 'location', 'country',)}),
         ('References', {
             'fields': ('citekey', 'tags', 'code', 'url', 'doi', 'isbn')}),
         ('Description', {
