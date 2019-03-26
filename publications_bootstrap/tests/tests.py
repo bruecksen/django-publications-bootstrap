@@ -4,7 +4,7 @@ from distutils.version import StrictVersion
 
 import django
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpRequest
 from django.template import Template, RequestContext
 from django.test import TestCase
