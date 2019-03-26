@@ -7,7 +7,8 @@ from django.db import models
 from django.utils.http import urlquote_plus
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
-from echoices.enums import EChoice, EOrderedChoice, EChoiceMeta
+from echoices.enums import EChoice, EOrderedChoice
+from echoices.enums.enums import EChoiceMeta
 from echoices.fields import make_echoicefield
 
 from ..fields import NullCharField, PagesField
