@@ -34,10 +34,10 @@ class Migration(migrations.Migration):
             name='publications',
             field=models.ManyToManyField(blank=True, db_index=True, to='publications_bootstrap.Publication'),
         ),
-        migrations.RunPython(forwards, backwards),
-        migrations.RemoveField(
-            model_name='publication',
-            name='catalogs',
-        ),
+        #migrations.RunPython(forwards, backwards),
+        #migrations.RemoveField(
+            #model_name='publication',
+            #name='catalogs',
+        #),
 
     ]
