@@ -60,7 +60,7 @@ class PublicationAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
             'fields': (
                 'book_title', 'journal', 'editor', 'organization', 'volume', 'number', 'series', 'edition',
-                'chapter', 'pages',)}),
+                'chapter', 'pages', 'section')}),
         ('Publishing', {
             'classes': ('collapse',),
             'fields': ('publisher', 'school', 'institution', 'location', 'country',)}),
