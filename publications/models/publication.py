@@ -56,21 +56,19 @@ class Publication(models.Model):
 	type = models.ForeignKey(Type)
 	citekey = models.CharField(max_length=512, blank=True, null=True,
 		help_text='BibTex citation key. Leave blank if unsure.')
-	title = models.CharField(max_length=512)
-	authors = models.CharField(max_length=2048,
-		help_text='List of authors separated by commas or <i>and</i>.')
-	year = models.PositiveIntegerField(max_length=4)
+	title = models.TextField()
+	authors = models.TextField(help_text='List of authors separated by commas or <i>and</i>.')
+	year = models.PositiveIntegerField()
 	month = models.IntegerField(choices=MONTH_CHOICES, blank=True, null=True)
-	journal = models.CharField(max_length=256, blank=True)
-	book_title = models.CharField(max_length=256, blank=True)
-	publisher = models.CharField(max_length=256, blank=True)
-	institution = models.CharField(max_length=256, blank=True)
+	journal = models.TextField(blank=True)
+	book_title = models.TextField(blank=True)
+	publisher = models.TextField(blank=True)
+	institution = models.TextField(blank=True)
 	volume = models.IntegerField(blank=True, null=True)
 	number = models.IntegerField(blank=True, null=True, verbose_name='Issue number')
 	pages = PagesField(max_length=32, blank=True)
-	note = models.CharField(max_length=256, blank=True)
-	keywords = models.CharField(max_length=256, blank=True,
-		help_text='List of keywords separated by commas.')
+	note = models.TextField(blank=True)
+	keywords = models.TextField(blank=True,	help_text='List of keywords separated by commas.')
 	url = models.URLField(blank=True, verbose_name='URL',
 		help_text='Link to PDF or journal page.')
 	code = models.URLField(blank=True,
@@ -78,11 +76,11 @@ class Publication(models.Model):
 	pdf = models.FileField(upload_to='publications/', verbose_name='PDF', blank=True, null=True)
 	image = models.ImageField(upload_to='publications/images/', blank=True, null=True)
 	thumbnail = models.ImageField(upload_to='publications/thumbnails/', blank=True, null=True)
-	doi = models.CharField(max_length=128, verbose_name='DOI', blank=True)
+	doi = models.TextField(verbose_name='DOI', blank=True)
 	external = models.BooleanField(default=False,
 		help_text='If publication was written in another lab, mark as external.')
 	abstract = models.TextField(blank=True)
-	isbn = models.CharField(max_length=32, verbose_name="ISBN", blank=True,
+	isbn = models.TextField(verbose_name="ISBN", blank=True,
 		help_text='Only for a book.') # A-B-C-D
 	lists = models.ManyToManyField(List, blank=True)
 
