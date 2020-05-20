@@ -4,12 +4,17 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
+import os
+
 from django.db import models
 from django.utils.http import urlquote_plus
-from django.contrib.sites.models import Site
+from django.conf import settings
 from publications.fields import PagesField
 from publications.models import Type, List
 from string import ascii_uppercase
+
+if 'django.contrib.sites' in settings.INSTALLED_APPS:
+	from django.contrib.sites.models import Site
 
 class Publication(models.Model):
 	"""
@@ -95,6 +100,14 @@ class Publication(models.Model):
 		self.keywords = [s.strip().lower() for s in self.keywords.split(',')]
 		self.keywords = ', '.join(self.keywords).lower()
 
+		self._produce_author_lists()
+
+
+	def _produce_author_lists(self):
+		"""
+		Parse authors string to create lists of authors.
+		"""
+
 		# post-process author names
 		self.authors = self.authors.replace(', and ', ', ')
 		self.authors = self.authors.replace(',and ', ', ')
@@ -106,6 +119,9 @@ class Publication(models.Model):
 
 		# simplified representation of author names
 		self.authors_list_simple = []
+
+		# author names represented as a tuple of given and family name
+		self.authors_list_split = []
 
 		# tests if title already ends with a punctuation mark
 		self.title_ends_with_punct = self.title[-1] in ['.', '!', '?'] \
@@ -119,7 +135,7 @@ class Publication(models.Model):
 		for i, author in enumerate(self.authors_list):
 			if author == '':
 				continue
-			
+
 			if '$' in author:
 				continue # don't attempt to process names with math-mode in them
 
@@ -167,6 +183,17 @@ class Publication(models.Model):
 				else:
 					self.authors_list_simple.append(self.simplify_name(names[0]))
 
+				# number of prepositions
+				num_prepositions = 0
+				for name in names:
+					if name in prepositions:
+						num_prepositions += 1
+
+				# splitting point
+				sp = 1 + num_suffixes + num_prepositions
+				self.authors_list_split.append(
+					(' '.join(names[:-sp]), ' '.join(names[-sp:])))
+
 		# list of authors in BibTex format
 		self.authors_bibtex = ' and '.join(self.authors_list)
 
@@ -182,6 +209,10 @@ class Publication(models.Model):
 
 
 	def __unicode__(self):
+		return self.__str__()
+
+
+	def __str__(self):
 		if len(self.title) < 64:
 			return self.title
 		else:
@@ -224,6 +255,10 @@ class Publication(models.Model):
 		return self.authors_list[0].split(' ')[-1] + str(self.year) + chr(char)
 
 
+	def title_bibtex(self):
+		return self.title.replace('%', r'\%')
+
+
 	def month_bibtex(self):
 		return self.MONTH_BIBTEX.get(self.month, '')
 
@@ -246,12 +281,23 @@ class Publication(models.Model):
 			return self.book_title
 
 
+	def first_page(self):
+		return self.pages.split('-')[0]
+
+
+	def last_page(self):
+		return self.pages.split('-')[-1]
+
+
 	def z3988(self):
 		contextObj = ['ctx_ver=Z39.88-2004']
 
-		current_site = Site.objects.get_current()
+		if 'django.contrib.sites' in settings.INSTALLED_APPS:
+			domain = Site.objects.get_current().domain
+		else:
+			domain = 'example.com'
 
-		rfr_id = current_site.domain.split('.')
+		rfr_id = domain.split('.')
 
 		if len(rfr_id) > 2:
 			rfr_id = rfr_id[-2]
@@ -262,8 +308,8 @@ class Publication(models.Model):
 
 		if self.book_title and not self.journal:
 			contextObj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:book')
-			contextObj.append('rfr_id=info:sid/' + current_site.domain + ':' + rfr_id)
-			contextObj.append('rft_id=' + urlquote_plus(self.doi))
+			contextObj.append('rfr_id=info:sid/' + domain + ':' + rfr_id)
+			contextObj.append('rft_id=info:doi/' + urlquote_plus(self.doi))
 
 			contextObj.append('rft.btitle=' + urlquote_plus(self.title))
 
@@ -272,8 +318,8 @@ class Publication(models.Model):
 
 		else:
 			contextObj.append('rft_val_fmt=info:ofi/fmt:kev:mtx:journal')
-			contextObj.append('rfr_id=info:sid/' + current_site.domain + ':' + rfr_id)
-			contextObj.append('rft_id=' + urlquote_plus(self.doi))
+			contextObj.append('rfr_id=info:sid/' + domain + ':' + rfr_id)
+			contextObj.append('rft_id=info:doi/' + urlquote_plus(self.doi))
 			contextObj.append('rft.atitle=' + urlquote_plus(self.title))
 
 			if self.journal:
@@ -305,6 +351,7 @@ class Publication(models.Model):
 
 	def clean(self):
 		if not self.citekey:
+			self._produce_author_lists()
 			self.citekey = self.key()
 
 		# remove unnecessary whitespace
@@ -318,8 +365,8 @@ class Publication(models.Model):
 	@staticmethod
 	def simplify_name(name):
 		name = name.lower()
-		name = name.replace( u'ä', u'ae')
-		name = name.replace( u'ö', u'oe')
-		name = name.replace( u'ü', u'ue')
-		name = name.replace( u'ß', u'ss')
+		name = name.replace(u'ä', u'ae')
+		name = name.replace(u'ö', u'oe')
+		name = name.replace(u'ü', u'ue')
+		name = name.replace(u'ß', u'ss')
 		return name
