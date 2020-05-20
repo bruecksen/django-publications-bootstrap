@@ -1,23 +1,25 @@
-django-publications
-===================
+[![Python](https://img.shields.io/badge/Python-3.4,3.5,3.6-blue.svg?style=flat-square)](/)
+[![Django](https://img.shields.io/badge/Django2.1-blue.svg?style=flat-square)](/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](/LICENSE)
+# Bootstrap-powered scientific publications for Django
 
-A Django app for managing scientific publications.
+A Django app for managing scientific publications, providing a Bootstrap-powered UI.
 
-Screenshots
------------
+
+## Screenshots
 
 [![frontend][3]][1]
 [![backend][4]][2]
 
-[1]: https://raw.githubusercontent.com/lucastheis/django-publications/media/frontend.png
+[1]: https://raw.githubusercontent.com/mbourqui/django-publications-bootstrap/media/frontend.png
 [2]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend.png
-[3]: https://raw.githubusercontent.com/lucastheis/django-publications/media/frontend_small.png
+[3]: https://raw.githubusercontent.com/mbourqui/django-publications-bootstrap/media/frontend_small.png
 [4]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend_small.png
 
-Features
---------
 
-* automatically creates lists for individual authors and keywords
+## Features
+
+* automatically creates lists for individual authors and tags
 * BibTex import/export
 * RIS export (EndNote, Reference Manager)
 * unAPI support (Zotero)
@@ -25,24 +27,53 @@ Features
 * PDF upload
 * RSS feeds
 * support for images
+* embeddable references
+* in-text citations, inspired by LaTeX
+* automatic bibliography, inspired by LaTeX
 
-Requirements
-------------
 
-* Python >= 2.7.0
-* Django >= 1.5.0
+## Requirements
+
+* Python >= 3.4
+* Django >= 2.1
 * Pillow >= 2.4.0
 * bibtexparser >= 0.5.5
+* django-countries >= 4.0
+* django-ordered-model >= 1.4.1
+* six >= 1.10.0
+* Bootstrap v4.0.0-beta
+* django-echoices >= 2.2.5
 
-Installation
-------------
 
-1) Run `pip install django-publications`.
+## Installation
 
-2) Add `'publications'` to `INSTALLED_APPS` in your project's `settings.py`.
+### Using [PyPI](https://pypi.python.org/pypi/django-publications-bootstrap)
+1. Run `pip install django-publications-bootstrap`.
 
-3) Add the following to your project's `urls.py`:
+### Using the source code
+1. Make sure [`pandoc`](http://pandoc.org/index.html) is installed
+1. Run `./pypi_packager.sh`
+1. Run `pip install dist/django_publications_bootstrap-x.y.z-[...].wheel`, where `x.y.z` must be replaced by the actual
+   version number and `[...]` depends on your packaging configuration
 
-	url(r'^publications/', include('publications.urls')),
+### Configuration
+1. Add `publications_bootstrap` to the `INSTALLED_APPS` in your project's settings (usually `settings.py`).
+1. Add the following to your project's `urls.py`:
 
-4) Run `./manage.py syncdb`.
+        url(r'^publications/', include('publications_bootstrap.urls')),
+
+1. Run `./manage.py migrate publications_bootstrap`.
+1. In your project's base template, make sure the following blocks are available in the `<head>` tag:
+    * `head`, to provide xml content
+    * `css`, to provide CSS specific to this application
+  
+    The content itself will be inserted in the `content` block.
+
+
+## Credits
+
+This is a fork [django-publications-bootstrap](https://github.com/mbourqui/django-publications-bootstrap) 
+of a fork of [django-publications](https://github.com/lucastheis/django-publications) from
+[lucastheis](https://github.com/lucastheis).
+The bibtex-import was derived (and modified) from 
+[christianglodt] (https://github.com/christianglodt/django-publications)
