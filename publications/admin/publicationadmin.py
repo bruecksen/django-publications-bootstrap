@@ -3,7 +3,13 @@ __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
 from django.contrib import admin
+try:
+	from django.conf.urls import url
+except ImportError:
+	from django.conf.urls.defaults import url
 from publications.models import CustomLink, CustomFile
+
+import publications.admin_views
 
 class CustomLinkInline(admin.StackedInline):
 	model = CustomLink
@@ -20,7 +26,7 @@ class CustomFileInline(admin.StackedInline):
 class PublicationAdmin(admin.ModelAdmin):
 	list_display = ('type', 'first_author', 'title', 'type', 'year', 'journal_or_book_title')
 	list_display_links = ('title',)
-	change_list_template = 'admin/publications/change_list.html'
+	change_list_template = 'admin/publications/publication_change_list.html'
 	search_fields = ('title', 'journal', 'authors', 'keywords', 'year', 'citekey')
 	fieldsets = (
 		(None, {'fields':
@@ -37,3 +43,9 @@ class PublicationAdmin(admin.ModelAdmin):
 			('lists',)}),
 	)
 	inlines = [CustomLinkInline, CustomFileInline]
+
+	def get_urls(self):
+		return [
+				url(r'^import_bibtex/$', publications.admin_views.import_bibtex,
+					name='publications_publication_import_bibtex'),
+			] + super(PublicationAdmin, self).get_urls()

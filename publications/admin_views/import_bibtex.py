@@ -2,8 +2,9 @@ __license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
 __author__ = 'Lucas Theis <lucas@theis.io>'
 __docformat__ = 'epytext'
 
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+import re
+import publications.six as six
+from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -30,7 +31,7 @@ def import_bibtex(request):
 	if request.method == 'POST':
 		# try to import BibTex
 		bibtex = request.POST['bibliography']
-		
+
 		with transaction.atomic():
 			publications, errors = do_import_bibtex(bibtex)
 
@@ -45,7 +46,7 @@ def import_bibtex(request):
 
 		# show message
 		messages.add_message(request, status, msg)
-		
+
 		for error in errors:
 			messages.add_message(request, messages.ERROR, error)
 
@@ -53,11 +54,11 @@ def import_bibtex(request):
 		return HttpResponseRedirect('../')
 
 	else:
-	    return render_to_response(
+	    return render(
+			request,
 					'admin/publications/import_bibtex.html', {
 					'title': 'Import BibTex',
 					'types': Type.objects.all(),
-					'request': request},
-				RequestContext(request))
+					'request': request})
 
 import_bibtex = staff_member_required(import_bibtex)

@@ -17,7 +17,7 @@
 			"order": 1,
 			"type": "Conference",
 			"description": "Conference Papers",
-			"bibtex_types": "inproceedings, proceeding, proceedings, conference",
+			"bibtex_types": "inproceedings, proceeding, proceedings, conference, incollection",
 			"hidden": 0
 		}
 	},
@@ -91,10 +91,21 @@
 	"model": "publications.type",
 	"pk": 9,
 		"fields": {
+			"order": 8,
+			"type": "Patent",
+			"description": "Patents",
+			"bibtex_types": "patent",
+			"hidden": 1
+		}
+	},
+	{
+	"model": "publications.type",
+	"pk": 10,
+		"fields": {
 			"order": 7,
 			"type": "Miscellaneous",
 			"description": "Miscellaneous Publications",
-			"bibtex_types": "misc, unknown, in, patent",
+			"bibtex_types": "misc, unknown",
 			"hidden": 1
 		}
 	},

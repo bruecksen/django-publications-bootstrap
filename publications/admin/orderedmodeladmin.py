@@ -27,17 +27,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from functools import update_wrapper
 
-# from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-# from django.utils.html import strip_spaces_between_tags as short
 from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
 from django.contrib import admin
 from django.contrib.admin.utils import unquote
 from django.contrib.admin.views.main import ChangeList
+from django.db.models.options import Options
 
+# Django <= 1.6
+if not getattr(Options, 'model_name', False):
+    Options.model_name = lambda self: self.module_name.lower()
+if not getattr(ChangeList, 'get_queryset', False):
+    ChangeList.get_queryset = ChangeList.get_query_set
 
 class OrderedModelAdmin(admin.ModelAdmin):
 
@@ -77,7 +81,7 @@ class OrderedModelAdmin(admin.ModelAdmin):
 
     def move_view(self, request, object_id, direction):
         cl = self._get_changelist(request)
-        qs = cl.get_query_set(request)
+        qs = cl.get_queryset(request)
 
         obj = get_object_or_404(self.model, pk=unquote(object_id))
         obj.move(direction, qs)

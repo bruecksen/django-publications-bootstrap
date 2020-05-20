@@ -1,7 +1,7 @@
 django-publications
 ===================
 
-A Django app for managing publications.
+A Django app for managing scientific publications.
 
 Screenshots
 -----------
@@ -9,44 +9,40 @@ Screenshots
 [![frontend][3]][1]
 [![backend][4]][2]
 
-[1]: http://files.theis.io/django-publications/frontend.png
-[2]: http://files.theis.io/django-publications/backend.png
-[3]: http://files.theis.io/django-publications/frontend_small.png
-[4]: http://files.theis.io/django-publications/backend_small.png
+[1]: https://raw.githubusercontent.com/lucastheis/django-publications/media/frontend.png
+[2]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend.png
+[3]: https://raw.githubusercontent.com/lucastheis/django-publications/media/frontend_small.png
+[4]: https://raw.githubusercontent.com/lucastheis/django-publications/media/backend_small.png
 
 Features
 --------
 
-* automatically creates lists for individual authors or keywords
+* automatically creates lists for individual authors and keywords
 * BibTex import/export
+* RIS export (EndNote, Reference Manager)
+* unAPI support (Zotero)
 * customizable publication categories/BibTex entry types
 * PDF upload
 * RSS feeds
 * support for images
-* support for Zotero/OpenURL
 
 Requirements
 ------------
 
 * Python >= 2.7.0
-* Django >= 1.3.0
+* Django >= 1.5.0
 * Pillow >= 2.4.0
 * bibtexparser >= 0.5.5
-
-The app was tested with the versions above, but older versions might also work.
 
 Installation
 ------------
 
-1) Copy the `publications` folder to your project or run `pip install django-publications`.
+1) Run `pip install django-publications`.
 
-2) Add `publications` to `INSTALLED_APPS` in your project's `settings.py`.
+2) Add `'publications'` to `INSTALLED_APPS` in your project's `settings.py`.
 
 3) Add the following to your project's `urls.py`:
 
 	url(r'^publications/', include('publications.urls')),
-	url(r'^admin/publications/publication/import_bibtex/$', 'publications.admin_views.import_bibtex'),
 
-The second line has to come before `url(r'^admin/', include(admin.site.urls))`!
-
-4) Run `./manage.py syncdb`
+4) Run `./manage.py syncdb`.

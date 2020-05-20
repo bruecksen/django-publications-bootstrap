@@ -10,6 +10,7 @@ from bibtexparser.customization import author, keyword
 from django.forms.models import model_to_dict
 
 import re
+import publications.six as six
 
 # mapping of months
 MONTHS = {
@@ -144,6 +145,7 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 				'doi',
 				'isbn',
 				'keywords',
+				'pages',
 				'note',
 				'abstract',
 				'month']
@@ -186,6 +188,14 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 				except ValueError:
 					entry['number'] = None
 
+			if isinstance(entry['volume'], six.text_type):
+				entry['volume'] = int(re.sub('[^0-9]', '', entry['volume']))
+			if isinstance(entry['number'], six.text_type):
+				entry['number'] = int(re.sub('[^0-9]', '', entry['number']))
+
+			# remove whitespace characters (likely due to line breaks)
+			entry['url'] = re.sub(r'\s', '', entry['url'])
+
 			publication_data = dict(type_id=type_id,
 				title=unicode(entry['title']),
 				authors=unicode(authors),
@@ -197,6 +207,7 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 				institution=unicode(entry['institution']),
 				volume=entry['volume'],
 				number=entry['number'],
+				pages=entry['pages'],
 				note=unicode(entry['note']),
 				url=unicode(entry['url']),
 				doi=unicode(entry['doi']),
