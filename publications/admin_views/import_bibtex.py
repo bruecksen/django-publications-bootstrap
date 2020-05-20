@@ -50,9 +50,11 @@ def import_bibtex(request):
 		for error in errors:
 			messages.add_message(request, messages.ERROR, error)
 
-		# redirect to publication listing
-		return HttpResponseRedirect('../')
-
+			# redirect to publication listing
+			if len(publications) == 1:
+				return HttpResponseRedirect('../%s/change/' % publications[0].id)
+			else:
+				return HttpResponseRedirect('../')
 	else:
 	    return render(
 			request,
