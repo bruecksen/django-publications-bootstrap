@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-__license__ = "MIT License <http://www.opensource.org/licenses/mit-license.php>"
-__authors__ = [
-    "Lucas Theis <lucas@theis.io>, Christian Glodt <chris@mind.lu>",
-    "Marc Bourqui",
-]
-__docformat__ = "epytext"
-
 from django import forms
 from django.forms import widgets
 from django.db.models import ManyToManyField, Field
@@ -268,23 +261,3 @@ try:
 except:
     pass
 
-
-class NullCharField(models.CharField):
-    """
-    Allows to apply the unique condition even if no value is set.
-    Adapted from U{http://stackoverflow.com/a/33525694}
-    U{Issue #4136<https://code.djangoproject.com/ticket/4136>} fixed in U{PR #6624<
-    https://github.com/django/django/pull/6624>}
-    Fixed in U{Django 1.11<https://docs.djangoproject.com/en/dev/releases/1.11/#miscellaneous>}
-    """
-
-    description = "CharField that stores NULL instead of empty strings"
-
-    def get_db_prep_value(self, value, connection=None, prepared=False):
-        value = super(NullCharField, self).get_db_prep_value(
-            value, connection, prepared
-        )
-        if value == "":
-            return None
-        else:
-            return value

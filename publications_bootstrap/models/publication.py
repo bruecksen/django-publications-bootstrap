@@ -77,7 +77,7 @@ class Publication(models.Model):
             return str(self.value)
 
     type = models.ForeignKey(Type, db_index=True, on_delete=models.PROTECT)
-    citekey = NullCharField(
+    citekey = models.CharField(
         max_length=255,
         blank=True,
         null=True,
