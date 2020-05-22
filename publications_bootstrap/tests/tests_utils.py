@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from django.test import TestCase
-from publications.utils import import_bibtex
+from publications_bootstrap.utils import import_bibtex
 
 class UnicodeCharMacroTestCase(TestCase):
     

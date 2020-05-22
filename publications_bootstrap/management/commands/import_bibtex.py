@@ -5,7 +5,7 @@ __docformat__ = 'epytext'
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from publications.utils import import_bibtex
+from publications_bootstrap.utils import import_bibtex
 
 from pprint import pprint
 
