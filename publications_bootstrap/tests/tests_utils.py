@@ -20,7 +20,7 @@ class UnicodeCharMacroTestCase(TestCase):
         in import_bibtex. This test checks for that. 
         """
 
-        bibtex = ur"""
+        bibtex = """
 @article{10993/15381,
     title = {Faster Print on Demand for Pr\text{\^e}t \text{\`a} Voter},
     author = {Culnane, C. and Heather, J. and Joaquim, R. and Ryan, P. and Schneider, S. and Teague, V.},
@@ -41,5 +41,5 @@ class UnicodeCharMacroTestCase(TestCase):
 
         self.assertEqual(
             pub.title,
-            ur"""Faster Print on Demand for Pr\text{{\^e}}t \text{{\`a}} Voter""",
+            """Faster Print on Demand for Pr\text{{\^e}}t \text{{\`a}} Voter""",
         )

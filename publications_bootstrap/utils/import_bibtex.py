@@ -332,7 +332,7 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
                     publication.save()
                     saved_publications.append(publication)
 
-                except Exception, e:
+                except Exception as e:
                     # show error message
                     key = publication.citekey
                     if not key:
