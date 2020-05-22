@@ -1,0 +1,206 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-05-22 23:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: admin/publicationadmin.py:224
+#, python-format
+msgid "Mark selected %(verbose_name_plural)s as drafts"
+msgstr ""
+
+#: admin/publicationadmin.py:231
+#, python-format
+msgid "Mark selected %(verbose_name_plural)s as submitted"
+msgstr ""
+
+#: admin/publicationadmin.py:238
+#, python-format
+msgid "Mark selected %(verbose_name_plural)s as accepted"
+msgstr ""
+
+#: admin/publicationadmin.py:245
+#, python-format
+msgid "Mark selected %(verbose_name_plural)s as published"
+msgstr ""
+
+#: models/publication.py:41
+msgid "January"
+msgstr ""
+
+#: models/publication.py:42
+msgid "February"
+msgstr ""
+
+#: models/publication.py:43
+msgid "March"
+msgstr ""
+
+#: models/publication.py:44
+msgid "April"
+msgstr ""
+
+#: models/publication.py:45
+msgid "May"
+msgstr ""
+
+#: models/publication.py:46
+msgid "June"
+msgstr ""
+
+#: models/publication.py:47
+msgid "July"
+msgstr ""
+
+#: models/publication.py:48
+msgid "August"
+msgstr ""
+
+#: models/publication.py:49
+msgid "September"
+msgstr ""
+
+#: models/publication.py:50
+msgid "October"
+msgstr ""
+
+#: models/publication.py:51
+msgid "November"
+msgstr ""
+
+#: models/publication.py:52
+msgid "December"
+msgstr ""
+
+#: models/publication.py:67
+msgid "draft"
+msgstr ""
+
+#: models/publication.py:68
+msgid "submitted"
+msgstr ""
+
+#: models/publication.py:69
+msgid "accepted"
+msgstr ""
+
+#: models/publication.py:70
+msgid "published"
+msgstr ""
+
+#: models/publication.py:117
+msgid "publication_field_institution_verbose"
+msgstr ""
+
+#: models/publication.py:118
+msgid "publication_field_institution_help"
+msgstr ""
+
+#: models/publication.py:167
+msgid "publication_field_url_verbose"
+msgstr ""
+
+#: models/publication.py:172
+msgid "publication_field_code_verbose"
+msgstr ""
+
+#: models/publication.py:179
+msgid "publication_field_pdf_verbose"
+msgstr ""
+
+#: models/publication.py:180
+msgid "publication_field_pdf_help"
+msgstr ""
+
+#: models/publication.py:186
+msgid "publication_field_image_verbose"
+msgstr ""
+
+#: models/publication.py:187
+msgid "publication_field_image_help"
+msgstr ""
+
+#: models/publication.py:193
+msgid "publication_field_thumbnail_verbose"
+msgstr ""
+
+#: models/publication.py:194
+msgid "publication_field_thumbnail_help"
+msgstr ""
+
+#: models/publication.py:199
+msgid "publication_field_external_verbose"
+msgstr ""
+
+#: models/publication.py:208
+msgid "publication_field_doi_verbose"
+msgstr ""
+
+#: models/publication.py:209
+msgid "publication_field_doi_help"
+msgstr ""
+
+#: models/publication.py:217
+msgid "publication_field_isbn_verbose"
+msgstr ""
+
+#: models/publication.py:218
+msgid "publication_field_isbn_help"
+msgstr ""
+
+#: models/publication.py:226
+msgid "publication_field_issn_verbose"
+msgstr ""
+
+#: models/publication.py:227
+msgid "publication_field_issn_help"
+msgstr ""
+
+#: templates/admin/publications_bootstrap/import_bibtex.html:8
+msgid "Home"
+msgstr ""
+
+#: templates/admin/publications_bootstrap/import_bibtex.html:9
+#: templates/admin/publications_bootstrap/import_bibtex.html:10
+msgid "Publications"
+msgstr ""
+
+#: templates/admin/publications_bootstrap/import_bibtex.html:11
+#: templates/admin/publications_bootstrap/publication_change_list.html:7
+msgid "Import BibTex"
+msgstr ""
+
+#: templates/admin/publications_bootstrap/import_bibtex.html:22
+msgid "Please correct the errors below."
+msgstr ""
+
+#: templates/admin/publications_bootstrap/import_bibtex.html:36
+msgid "Bibliography"
+msgstr ""
+
+#: templates/admin/publications_bootstrap/import_bibtex.html:38
+msgid "Required keys: title, author and year."
+msgstr ""
+
+#: templates/admin/publications_bootstrap/import_bibtex.html:43
+msgid "Import"
+msgstr ""
+
+#: templates/admin/publications_bootstrap/publication_change_list.html:11
+#, python-format
+msgid "Add %(name)s"
+msgstr ""
