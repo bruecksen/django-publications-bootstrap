@@ -6,6 +6,8 @@
 [![Build Status](https://travis-ci.org/mbourqui/django-publications-bootstrap.svg?branch=master)](https://travis-ci.org/mbourqui/django-publications-bootstrap)
 [![Coverage Status](https://coveralls.io/repos/github/mbourqui/django-publications-bootstrap/badge.svg?branch=master)](https://coveralls.io/github/mbourqui/django-publications-bootstrap?branch=master)
 [![Updates](https://pyup.io/repos/github/mbourqui/django-publications-bootstrap/shield.svg)](https://pyup.io/repos/github/mbourqui/django-publications-bootstrap/)
+[![Downloads](https://pepy.tech/badge/django-publications-bootstrap)](https://pepy.tech/project/django-publications-bootstrap)
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
 # Bootstrap-powered scientific publications for Django
 
