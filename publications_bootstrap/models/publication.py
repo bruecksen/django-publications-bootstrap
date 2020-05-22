@@ -11,7 +11,7 @@ from echoices.enums import EChoice, EOrderedChoice
 from echoices.enums.enums import EChoiceMeta
 from echoices.fields import make_echoicefield
 
-from ..fields import NullCharField, PagesField
+from ..fields import PagesField
 from ..models import Type
 
 if "django.contrib.sites" in settings.INSTALLED_APPS:
