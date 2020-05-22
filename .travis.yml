@@ -35,12 +35,10 @@ before_install:
     - ./pypi_packager.sh
 install:
     - pip install -q django==$DJANGO_VERSION
-    - pip install -q -e .
-    - pip install -q selenium
-    - pip install -q black
-    - pip install -q coveralls
+    - pip install -q -r requirements/tests.txt
 script:
     - black publications_bootstrap --check
+    - safety check
     - coverage run --source publications_bootstrap publications_bootstrap/tests/__main__.py
 after_success:
     - coveralls

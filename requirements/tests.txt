@@ -1,0 +1,7 @@
+-r release.txt
+
+black
+safety
+coveralls
+
+selenium
