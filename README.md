@@ -1,5 +1,5 @@
 [![Python 3](https://pyup.io/repos/github/mbourqui/django-publications-bootstrap/python-3-shield.svg)](https://pyup.io/repos/github/mbourqui/django-publications-bootstrap/)
-[![Python](https://img.shields.io/badge/Python-3.4,3.5,3.6,3.7-blue.svg?style=flat-square)](/)
+[![Python](https://img.shields.io/badge/Python-3.5,3.6,3.7-blue.svg?style=flat-square)](/)
 [![Django](https://img.shields.io/badge/Django-1.11,2.1,2.2-blue.svg?style=flat-square)](/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/django_publications_bootstrap.svg?style=flat-square)](https://pypi.python.org/pypi/django-publications-bootstrap)
