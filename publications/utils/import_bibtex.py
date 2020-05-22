@@ -9,6 +9,7 @@ from bibtexparser.bparser import BibTexParser
 from bibtexparser.customization import author, keyword
 from django.forms.models import model_to_dict
 from django_countries import countries
+from django.core.exceptions import FieldDoesNotExist
 
 import re
 import publications.six as six
@@ -143,12 +144,12 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 				if ',' in n:
 					return ' '.join([p.strip() for p in n.split(',')][::-1])
 				return n
-			authors = ', '.join([reverse_and_unseparate_name(n) for n in entry['author']])
+			author = entry.pop('author', [])
+			authors = ', '.join([reverse_and_unseparate_name(n) for n in author])
 
 			# add missing keys
 			keys = [
 				'journal',
-				'booktitle',
 				'address',
 				'country',
 				'publisher',
@@ -161,14 +162,15 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 				'url',
 				'doi',
 				'isbn',
-				'keywords',
 				'note',
 				'abstract',
-				'month']
+				]
 
 			for key in keys:
 				if not entry.has_key(key):
 					entry[key] = u''
+
+			citekey = entry.pop('key', None)
 
 			# map month
 			entry['month'] = Publication.EMonths.get(MONTHS.get(entry['month'].lower(), 0), None)
@@ -176,14 +178,17 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 			# determine type
 			type_id = None
 
+			reftype = entry.pop('type', '')
 			for t in types:
-				if entry['type'] in t.bibtex_type_list:
+				if reftype in t.bibtex_type_list:
 					type_id = t.id
 					break
 
 			if type_id is None:
-				errors.append('Type "' + entry['type'] + '" unknown.')
+				errors.append('Type "' + reftype + '" unknown.')
 				continue
+
+			book_title = entry.pop('booktitle', None)
 
 			# handle case where 'volume' key contains DOI reference
 			volume = entry.get('volume', None)
@@ -209,52 +214,50 @@ def import_bibtex(bibtex, bibtexparser_customization=None):
 			if isinstance(entry['number'], six.text_type):
 				entry['number'] = int(re.sub('[^0-9]', '', entry['number']))
 
+			# keywords and tags are expected to be a string
+			keywords = entry.pop('keywords', '')
+			tags = entry.pop('tags', '')
+			kw_tags = []
+			if keywords:
+				kw_tags.append(keywords)
+			if tags:
+				kw_tags.append(tags)
+			tags = ', '.join(kw_tags)
+
 			for field in ['chapter', 'section']:
 				entry[field] = entry.get(field, None)
 
 			# remove whitespace characters (likely due to line breaks)
 			entry['url'] = re.sub(r'\s', '', entry['url'])
 
-			if 'country' not in entry:
-				entry['country'] = ''
-			else:
-				if entry['country'].strip() in COUNTRIES_BY_NAME:
-					entry['country'] = COUNTRIES_BY_NAME[entry['country'].strip()]
-				elif entry['country'].upper() in COUNTRIES_BY_CODE:
-					entry['country'] = entry['country'].upper()
-				else:
-					entry['country'] = ''
+			country = entry.pop('country', '').strip()
+			if country in COUNTRIES_BY_NAME:
+				entry['country'] = COUNTRIES_BY_NAME[country]
+			elif country.upper() in COUNTRIES_BY_CODE:
+				entry['country'] = country.upper()
 
-			publication_data = dict(type_id=type_id,
-				citekey=entry['key'],
-				title=entry['title'],
+			file = entry.pop('file', None)
+			if file and not 'pdf' in entry:
+				entry['pdf'] = file
+
+			fields_to_skip = []
+			for field in entry:
+				try:
+					_ = Publication._meta.get_field(field)
+				except FieldDoesNotExist:
+					fields_to_skip.append(field)
+			for field in fields_to_skip:
+				entry.pop(field)
+
+			publication_data = dict(
+				type_id=type_id,
+				citekey=citekey,
 				authors=authors,
-				year=entry['year'],
-				month=entry['month'],
-				journal=entry['journal'],
-				book_title=entry['booktitle'],
-				publisher=entry['publisher'],
-				location=entry['address'],
-				country=entry['country'],
-				editor=entry['editor'],
-				edition=entry['edition'],
-				institution=entry['institution'],
-				school=entry['school'],
-				organization=entry['organization'],
-				series=entry['series'],
-				volume=entry['volume'],
-				number=entry['number'],
-				pages=entry['pages'],
-				chapter=entry['chapter'],
-				section=entry['section'],
-				note=entry['note'],
-				url=entry['url'],
-				doi=entry['doi'],
-				isbn=entry['isbn'],
+				book_title=book_title,
 				external=False,
-				abstract=entry['abstract'],
-				keywords=u', '.join(entry['keywords']),
-				status=Publication.PUBLISHED)
+				tags=tags,
+				status=Publication.PUBLISHED,
+				**entry)
 
 			publication = Publication(**publication_data)
 
