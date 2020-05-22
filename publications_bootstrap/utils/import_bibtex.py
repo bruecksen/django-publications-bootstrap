@@ -4,15 +4,16 @@ __license__ = "MIT License <http://www.opensource.org/licenses/mit-license.php>"
 __author__ = "Lucas Theis <lucas@theis.io> and Christian Glodt <chris@mind.lu>"
 __docformat__ = "epytext"
 
-from publications.models import Publication, Type
+import re
+
+import django.utils.six as six
 from bibtexparser.bparser import BibTexParser
 from bibtexparser.customization import author, keyword
+from django.core.exceptions import FieldDoesNotExist
 from django.forms.models import model_to_dict
 from django_countries import countries
-from django.core.exceptions import FieldDoesNotExist
 
-import re
-import publications.six as six
+from ..models import Publication, Type
 
 # mapping of months
 MONTHS = {

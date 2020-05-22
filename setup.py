@@ -39,7 +39,6 @@ setup(
         'bibtexparser>=1.1.0',
         'django-countries>=6.0',
         'django-ordered-model>=2.1.0',
-        'six>=1.10.0',
         'django-echoices>=2.6',
     ],
     zip_safe=False,
