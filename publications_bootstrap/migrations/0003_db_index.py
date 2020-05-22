@@ -11,48 +11,68 @@ import publications_bootstrap.models.publication
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('publications_bootstrap', '0002_initial_data'),
+        ("publications_bootstrap", "0002_initial_data"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='catalog',
-            name='title',
+            model_name="catalog",
+            name="title",
             field=models.CharField(db_index=True, max_length=128, unique=True),
         ),
         migrations.AlterField(
-            model_name='publication',
-            name='citekey',
-            field=publications_bootstrap.fields.NullCharField(blank=True, db_index=True, help_text='BibTex citation key. Leave blank if unsure.', max_length=512, null=True, unique=True),
+            model_name="publication",
+            name="citekey",
+            field=publications_bootstrap.fields.NullCharField(
+                blank=True,
+                db_index=True,
+                help_text="BibTex citation key. Leave blank if unsure.",
+                max_length=512,
+                null=True,
+                unique=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='publication',
-            name='external',
-            field=models.BooleanField(db_index=True, default=False, help_text='If publication was written in another lab, mark as external.'),
+            model_name="publication",
+            name="external",
+            field=models.BooleanField(
+                db_index=True,
+                default=False,
+                help_text="If publication was written in another lab, mark as external.",
+            ),
         ),
         migrations.AlterField(
-            model_name='publication',
-            name='month',
-            field=echoices.fields.make_echoicefield(blank=True, db_index=True, echoices=publications_bootstrap.models.Publication.EMonths, null=True),
+            model_name="publication",
+            name="month",
+            field=echoices.fields.make_echoicefield(
+                blank=True,
+                db_index=True,
+                echoices=publications_bootstrap.models.Publication.EMonths,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='publication',
-            name='title',
+            model_name="publication",
+            name="title",
             field=models.CharField(db_index=True, max_length=512),
         ),
         migrations.AlterField(
-            model_name='publication',
-            name='year',
+            model_name="publication",
+            name="year",
             field=models.PositiveIntegerField(db_index=True),
         ),
         migrations.AlterField(
-            model_name='type',
-            name='hidden',
-            field=models.BooleanField(db_index=True, default=False, help_text='Hide publications from main view.'),
+            model_name="type",
+            name="hidden",
+            field=models.BooleanField(
+                db_index=True,
+                default=False,
+                help_text="Hide publications from main view.",
+            ),
         ),
         migrations.AlterField(
-            model_name='type',
-            name='title',
+            model_name="type",
+            name="title",
             field=models.CharField(db_index=True, max_length=128, unique=True),
         ),
     ]

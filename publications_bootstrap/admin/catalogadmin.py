@@ -14,6 +14,6 @@ class CatalogAdmin(admin.ModelAdmin):
             name = Publication._meta.verbose_name_plural
         return "{} {}".format(count, name)
 
-    publications_count.short_description = 'Publications'
+    publications_count.short_description = "Publications"
 
-    list_display = ('title', 'description', 'publications_count')
+    list_display = ("title", "description", "publications_count")

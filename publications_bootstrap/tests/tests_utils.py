@@ -3,12 +3,13 @@
 from django.test import TestCase
 from publications_bootstrap.utils import import_bibtex
 
+
 class UnicodeCharMacroTestCase(TestCase):
-    
-    fixtures = ('initial_data.json', )
+
+    fixtures = ("initial_data.json",)
 
     def test_import_and_rendering_biber_compatible(self):
-        '''orbilu.uni.lu exports BibTeX data in which unicode characters have
+        """orbilu.uni.lu exports BibTeX data in which unicode characters have
         been replaced with LaTeX macros, and wrapped in \text{}, but incorrectly.
         
         For example, \text{\^e} is used to produce the 'ê' character. The grouping
@@ -17,9 +18,9 @@ class UnicodeCharMacroTestCase(TestCase):
         
         For reasons of simplicity, we fix this case with a bibtexparser customization
         in import_bibtex. This test checks for that. 
-        '''
-        
-        bibtex = ur'''
+        """
+
+        bibtex = ur"""
 @article{10993/15381,
     title = {Faster Print on Demand for Pr\text{\^e}t \text{\`a} Voter},
     author = {Culnane, C. and Heather, J. and Joaquim, R. and Ryan, P. and Schneider, S. and Teague, V.},
@@ -29,13 +30,16 @@ class UnicodeCharMacroTestCase(TestCase):
     year = 2013,
     url = {https://www.usenix.org/jets/issues/0201}
 }
-        '''
-        
+        """
+
         pubs, errors = import_bibtex(bibtex)
-        
+
         self.assertEqual(len(pubs), 1, errors)
         self.assertEqual(len(errors), 0)
-        
+
         pub = pubs[0]
-        
-        self.assertEqual(pub.title, ur'''Faster Print on Demand for Pr\text{{\^e}}t \text{{\`a}} Voter''')
+
+        self.assertEqual(
+            pub.title,
+            ur"""Faster Print on Demand for Pr\text{{\^e}}t \text{{\`a}} Voter""",
+        )

@@ -7,11 +7,11 @@ from ..models import Publication
 
 class PublicationFile(models.Model):
     class Meta:
-        app_label = 'publications_bootstrap'  # Fix for Django<1.7
+        app_label = "publications_bootstrap"  # Fix for Django<1.7
 
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE)
     description = models.CharField(max_length=256)
-    file = models.FileField(upload_to='publications_bootstrap/')
+    file = models.FileField(upload_to="publications_bootstrap/")
 
     def __unicode__(self):
         return self.description

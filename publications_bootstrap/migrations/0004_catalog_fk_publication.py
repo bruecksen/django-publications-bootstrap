@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 from django.db import migrations
 from django.db import models
 
-app_label = 'publications_bootstrap'
+app_label = "publications_bootstrap"
 
 
 def forwards(apps, schema_editor):
@@ -25,19 +25,17 @@ def backwards(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('publications_bootstrap', '0003_db_index'),
+        ("publications_bootstrap", "0003_db_index"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='catalog',
-            name='publications',
-            field=models.ManyToManyField(blank=True, db_index=True, to='publications_bootstrap.Publication'),
+            model_name="catalog",
+            name="publications",
+            field=models.ManyToManyField(
+                blank=True, db_index=True, to="publications_bootstrap.Publication"
+            ),
         ),
         migrations.RunPython(forwards, backwards),
-        migrations.RemoveField(
-            model_name='publication',
-            name='catalogs',
-        ),
-
+        migrations.RemoveField(model_name="publication", name="catalogs",),
     ]

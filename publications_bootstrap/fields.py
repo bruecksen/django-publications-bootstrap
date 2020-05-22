@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
-__license__ = 'MIT License <http://www.opensource.org/licenses/mit-license.php>'
-__authors__ = ['Lucas Theis <lucas@theis.io>, Christian Glodt <chris@mind.lu>', 'Marc Bourqui']
-__docformat__ = 'epytext'
+__license__ = "MIT License <http://www.opensource.org/licenses/mit-license.php>"
+__authors__ = [
+    "Lucas Theis <lucas@theis.io>, Christian Glodt <chris@mind.lu>",
+    "Marc Bourqui",
+]
+__docformat__ = "epytext"
 
 from django import forms
 from django.forms import widgets
@@ -12,10 +15,13 @@ import re
 import os
 import sys
 
+
 class PagesWidget(widgets.MultiWidget):
     def __init__(self, *args, **kwargs):
-        attrs = {'style': 'width: 40px; text-align: center;'}
-        forms.widgets.MultiWidget.__init__(self, [widgets.TextInput(attrs), widgets.TextInput(attrs)], *args, **kwargs)
+        attrs = {"style": "width: 40px; text-align: center;"}
+        forms.widgets.MultiWidget.__init__(
+            self, [widgets.TextInput(attrs), widgets.TextInput(attrs)], *args, **kwargs
+        )
 
     def format_output(self, rendered_widgets):
         to = ' <span style="vertical-align: middle;">to</span> '
@@ -23,7 +29,7 @@ class PagesWidget(widgets.MultiWidget):
 
     def decompress(self, value):
         if value:
-            values = value.split('-')
+            values = value.split("-")
             if len(values) > 1:
                 return values
             if len(values) > 0:
@@ -35,40 +41,43 @@ class PagesForm(forms.MultiValueField):
     widget = PagesWidget
 
     def __init__(self, *args, **kwargs):
-        forms.MultiValueField.__init__(self, [forms.CharField(), forms.CharField()], *args, **kwargs)
+        forms.MultiValueField.__init__(
+            self, [forms.CharField(), forms.CharField()], *args, **kwargs
+        )
 
     def compress(self, data_list):
         if data_list:
             if data_list[0] and data_list[1]:
                 if data_list[0] == data_list[1]:
                     return str(data_list[0])
-                return str(data_list[0]) + '-' + str(data_list[1])
+                return str(data_list[0]) + "-" + str(data_list[1])
             if data_list[0]:
                 return str(data_list[0])
             if data_list[1]:
                 return str(data_list[1])
-        return ''
+        return ""
 
 
 class PagesField(Field):
     def formfield(self, **kwargs):
-        kwargs['form_class'] = PagesForm
+        kwargs["form_class"] = PagesForm
         return Field.formfield(self, **kwargs)
 
     def get_internal_type(self):
-        return 'CharField'
+        return "CharField"
 
 
 def latex_citekey_extractor(latex):
     if not latex:
         return
-    cite_sets = re.findall(r'.*?\\cite{(.*?)}.*?', latex)
+    cite_sets = re.findall(r".*?\\cite{(.*?)}.*?", latex)
     for cite_set in cite_sets:
-        for cite in cite_set.split(','):
+        for cite in cite_set.split(","):
             yield cite.strip()
 
+
 class CitationsField(ManyToManyField):
-    '''A many-to-many field pointing to publications.Citation objects that
+    """A many-to-many field pointing to publications.Citation objects that
        automatically maintains a collection of Citation objects that correspond
        to citations (ie. mentions of a citekey) in the value of a given field
        (as determined by an extractor function).
@@ -91,20 +100,22 @@ class CitationsField(ManyToManyField):
        (or None if no Publication has that citekey). The CitationsField maintains
        the collection of Citation objects automatically when the text of the chapter
        changes, or when the Publications themselves change.
-    '''
+    """
 
     _publication_save_listener_connected = False
 
-    def __init__(self, text_field_name, citekey_extractor=latex_citekey_extractor, **kwargs):
-        '''@param text_field_name: the name of the field in which to look for citations
+    def __init__(
+        self, text_field_name, citekey_extractor=latex_citekey_extractor, **kwargs
+    ):
+        """@param text_field_name: the name of the field in which to look for citations
            @type text_field_name: str or unicode
            @param citekey_extractor: a function that takes the value of the field named by 'text_field_name'
                                       as parameter and returns a list of citekeys. The default
                                       function parses LaTeX citations (eg. \\cite{key}).
            @type citekey_extractor: callable returning a list of strings or unicode objects.
            @return a new CitationsField
-        '''
-        kwargs.update(to='publications.Citation', blank=True)
+        """
+        kwargs.update(to="publications.Citation", blank=True)
         ManyToManyField.__init__(self, **kwargs)
 
         self.text_field_name = text_field_name
@@ -145,14 +156,14 @@ class CitationsField(ManyToManyField):
 
         # Don't do anything if the object is saved due to loading a fixture.
         # Note: this check does not work yet because of https://code.djangoproject.com/ticket/27380
-        if kwargs.get('raw', False):
+        if kwargs.get("raw", False):
             return
 
         # Allow overriding signal handling when loading fixtures from the command line
-        if os.environ.get('DJANGO_PUBLICATIONS_IGNORE_SIGNALS', False):
+        if os.environ.get("DJANGO_PUBLICATIONS_IGNORE_SIGNALS", False):
             return
 
-        if action == 'pre_clear':
+        if action == "pre_clear":
             # This signal happens after post_save, when the m2m field is about
             # to be rewritten with form data. We delete Citation instances,
             # because we don't want dangling Citations that are not in a relation
@@ -162,7 +173,7 @@ class CitationsField(ManyToManyField):
             return
 
         # required because of admin behaviour (change of m2m fields after save of instance)
-        if action == 'post_clear':
+        if action == "post_clear":
             # This signal happens at the end of a save operation in the model admin, and
             # after the changes to the m2m field. We reset the m2m field references to
             # citation objects.
@@ -179,7 +190,7 @@ class CitationsField(ManyToManyField):
             return
 
         # Don't do anything if the object is saved due to loading a fixture.
-        if kwargs.get('raw', False):
+        if kwargs.get("raw", False):
             return
 
         try:
@@ -191,7 +202,7 @@ class CitationsField(ManyToManyField):
     def _update_citations(self, instance):
         from publications.models import Publication, Citation
 
-        if sys.argv == ['manage.py', 'migrate']: # :(
+        if sys.argv == ["manage.py", "migrate"]:  # :(
             return
 
         text = getattr(instance, self.text_field_name)
@@ -214,7 +225,9 @@ class CitationsField(ManyToManyField):
             if db_pubs:
                 pub = db_pubs.first()
 
-            citation = Citation(citekey=key, field_name=self.text_field_name, publication=pub)
+            citation = Citation(
+                citekey=key, field_name=self.text_field_name, publication=pub
+            )
             citation.save()
             citations.append(citation)
         # Add all citations in one go
@@ -222,7 +235,7 @@ class CitationsField(ManyToManyField):
 
     def _publication_saved(self, instance, **kwargs):
         # Don't do anything if the object is saved due to loading a fixture.
-        if kwargs.get('raw', False):
+        if kwargs.get("raw", False):
             return
 
         from publications.models import Citation
@@ -233,16 +246,25 @@ class CitationsField(ManyToManyField):
         # Update those citations that point to this publication but whose
         # citekey does no longer match. Set their publication to None.
         # (Note: qs.update() does not call Citation.save() and does not emit signals).
-        Citation.objects.filter(publication=publication).exclude(citekey=publication.citekey).update(publication=None)
+        Citation.objects.filter(publication=publication).exclude(
+            citekey=publication.citekey
+        ).update(publication=None)
 
         # Update those citations that have a matching citekey but which
         # don't point to the correct publication.
-        Citation.objects.filter(citekey=publication.citekey).exclude(publication=publication).update(publication=publication)
+        Citation.objects.filter(citekey=publication.citekey).exclude(
+            publication=publication
+        ).update(publication=publication)
+
 
 try:
     from south.modelsinspector import add_introspection_rules
+
     add_introspection_rules([], ["^publications_bootstrap\.fields\.PagesField"])
-    add_introspection_rules([([CitationsField], [], { 'text_field_name' : ('text_field_name', {}) })], ["^publications\.fields\.CitationsField"])
+    add_introspection_rules(
+        [([CitationsField], [], {"text_field_name": ("text_field_name", {})})],
+        ["^publications\.fields\.CitationsField"],
+    )
 except:
     pass
 
@@ -255,10 +277,13 @@ class NullCharField(models.CharField):
     https://github.com/django/django/pull/6624>}
     Fixed in U{Django 1.11<https://docs.djangoproject.com/en/dev/releases/1.11/#miscellaneous>}
     """
+
     description = "CharField that stores NULL instead of empty strings"
 
     def get_db_prep_value(self, value, connection=None, prepared=False):
-        value = super(NullCharField, self).get_db_prep_value(value, connection, prepared)
+        value = super(NullCharField, self).get_db_prep_value(
+            value, connection, prepared
+        )
         if value == "":
             return None
         else:
