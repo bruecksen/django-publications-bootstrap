@@ -14,9 +14,9 @@ class Command(BaseCommand):
     help = u"Imports a BibTeX file into django-publications."
 
     def handle(self, *args, **options):
-        with file(args[0], "rb") as f:
+        with open(args[0], "rb") as f:
             with transaction.atomic():
                 publications, errors = import_bibtex(f)
 
-        print "Imported %i Publication(s)" % len(publications)
+        print("Imported %i Publication(s)" % len(publications))
         pprint(errors)

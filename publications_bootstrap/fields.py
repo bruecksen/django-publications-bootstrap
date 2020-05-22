@@ -120,7 +120,7 @@ class CitationsField(ManyToManyField):
         return name, path, args + [self.text_field_name], kwargs
 
     def contribute_to_class(self, cls, name):
-        from publications.models import Publication
+        from .models import Publication
 
         ManyToManyField.contribute_to_class(self, cls, name)
 
@@ -193,7 +193,7 @@ class CitationsField(ManyToManyField):
             self._is_updating_m2m = False
 
     def _update_citations(self, instance):
-        from publications.models import Publication, Citation
+        from .models import Publication, Citation
 
         if sys.argv == ["manage.py", "migrate"]:  # :(
             return
@@ -231,7 +231,7 @@ class CitationsField(ManyToManyField):
         if kwargs.get("raw", False):
             return
 
-        from publications.models import Citation
+        from .models import Citation
 
         # When a publication changes, we change Citation instances that point to it via their citekey.
 
@@ -260,4 +260,3 @@ try:
     )
 except:
     pass
-

@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import re
-
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import HttpResponseRedirect
 from django.db import transaction
-from ..models import Publication, Type
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+
+from ..models import Type
+from ..utils import import_bibtex as do_import_bibtex
 
 # mapping of months
 MONTHS = {

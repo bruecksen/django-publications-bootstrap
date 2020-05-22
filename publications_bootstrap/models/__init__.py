@@ -5,3 +5,4 @@ from .catalog import Catalog
 from .publication import Publication
 from .publicationlink import PublicationLink
 from .publicationfile import PublicationFile
+from .citation import Citation
