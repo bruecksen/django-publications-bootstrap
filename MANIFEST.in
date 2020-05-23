@@ -5,3 +5,4 @@ include CHANGELOG.md
 recursive-include publications_bootstrap/templates *
 recursive-include publications_bootstrap/fixtures *
 recursive-include publications_bootstrap/static *
+include publications_bootstrap/locale/*/LC_MESSAGES/*

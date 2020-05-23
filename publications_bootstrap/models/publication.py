@@ -38,18 +38,18 @@ class Publication(models.Model):
 
     # names shown in admin area
     class EMonths(EOrderedChoice, metaclass=EChoiceMetaInt):
-        JAN = (1, _("January"), "Jan")
-        FEB = (2, _("February"), "Feb")
-        MAR = (3, _("March"), "Mar")
-        APR = (4, _("April"), "Apr")
-        MAY = (5, _("May"), "May")
-        JNE = (6, _("June"), "Jun")
-        JLY = (7, _("July"), "Jul")
-        AUG = (8, _("August"), "Aug")
-        SEP = (9, _("September"), "Sep")
-        OCT = (10, _("October"), "Oct")
-        NOV = (11, _("November"), "Nov")
-        DEC = (12, _("December"), "Dec")
+        JAN = (1, _("month_january"), "Jan")
+        FEB = (2, _("month_february"), "Feb")
+        MAR = (3, _("month_march"), "Mar")
+        APR = (4, _("month_april"), "Apr")
+        MAY = (5, _("month_may"), "May")
+        JNE = (6, _("month_june"), "Jun")
+        JLY = (7, _("month_july"), "Jul")
+        AUG = (8, _("month_august"), "Aug")
+        SEP = (9, _("month_september"), "Sep")
+        OCT = (10, _("month_october"), "Oct")
+        NOV = (11, _("month_november"), "Nov")
+        DEC = (12, _("month_december"), "Dec")
 
         def __init__(self, v_, l_, bibtex):
             # abbreviations used in BibTex
@@ -64,10 +64,11 @@ class Publication(models.Model):
 
     # Status of the publication
     class EStatuses(EChoice):
-        DRAFT = ("d", _("draft"))
-        SUBMITTED = ("s", _("submitted"))
-        ACCEPTED = ("a", _("accepted"))
-        PUBLISHED = ("p", _("published"))
+        # TODO add more statuses, like 'review', 'rejected', etc
+        DRAFT = ("d", _("publication_status_draft"))
+        SUBMITTED = ("s", _("publication_status_submitted"))
+        ACCEPTED = ("a", _("publication_status_accepted"))
+        PUBLISHED = ("p", _("publication_status_published"))
 
         def __str__(self):
             """
@@ -76,41 +77,67 @@ class Publication(models.Model):
             """
             return str(self.value)
 
-    type = models.ForeignKey(Type, db_index=True, on_delete=models.PROTECT)
+    type = models.ForeignKey(
+        Type,
+        db_index=True,
+        on_delete=models.PROTECT,
+        verbose_name=_("publication_field_type_verbose"),
+        help_text=_("publication_field_type_help"),
+    )
     citekey = models.CharField(
         max_length=255,
         blank=True,
         null=True,
         unique=True,
         db_index=True,
-        help_text="BibTex citation key. Leave blank if unsure.",
+        verbose_name=_("publication_field_citekey_verbose"),
+        help_text=_("publication_field_citekey_help"),
     )
-    title = models.TextField(db_index=True)
+    title = models.TextField(
+        db_index=True,
+        verbose_name=_("publication_field_title_verbose"),
+        help_text=_("publication_field_title_help"),
+    )
     authors = models.TextField(
-        help_text="List of authors separated by commas or <i>and</i>."
+        verbose_name=_("publication_field_authors_verbose"),
+        help_text=_("publication_field_authors_help"),
     )
-    year = models.PositiveIntegerField(db_index=True)
-    month = make_echoicefield(EMonths, blank=True, null=True)
-    journal = models.TextField(blank=True)
+    year = models.PositiveIntegerField(
+        db_index=True,
+        verbose_name=_("publication_field_year_verbose"),
+        help_text=_("publication_field_year_help"),
+    )
+    month = make_echoicefield(
+        EMonths,
+        blank=True,
+        null=True,
+        verbose_name=_("publication_field_month_verbose"),
+        help_text=_("publication_field_month_help"),
+    )
+    journal = models.TextField(
+        blank=True,
+        verbose_name=_("publication_field_journal_verbose"),
+        help_text=_("publication_field_journal_help"),
+    )
     book_title = models.TextField(
         blank=True,
-        help_text="Title of a book, part of which is being cited. See "
-        "the LATEX book for how to type titles. For book "
-        "entries, use the `title` field instead",
+        verbose_name=_("publication_field_booktitle_verbose"),
+        help_text=_("publication_field_booktitle_help"),
     )
-    publisher = models.TextField(blank=True)
+    publisher = models.TextField(
+        blank=True,
+        verbose_name=_("publication_field_publisher_verbose"),
+        help_text=_("publication_field_publisher_help"),
+    )
     editor = models.TextField(
         blank=True,
-        help_text="Name(s) of editor(s), typed as indicated in the LATEX "
-        "book. If there is also an `author` field, then the "
-        "`editor` field gives the editor of the book or "
-        "collection in which the reference appears.",
+        verbose_name=_("publication_field_editor_verbose"),
+        help_text=_("publication_field_editor_help"),
     )
     edition = models.TextField(
         blank=True,
-        help_text='The edition of a book -- for example, "Second". This '
-        "should be an ordinal, and should have the first letter "
-        "capitalized.",
+        verbose_name=_("publication_field_edition_verbose"),
+        help_text=_("publication_field_edition_help"),
     )
     institution = models.TextField(
         blank=True,
@@ -118,88 +145,118 @@ class Publication(models.Model):
         help_text=_("publication_field_institution_help"),
     )
     school = models.TextField(
-        blank=True, help_text="The name of the school where a thesis was written.",
-    )
-    organization = models.TextField(
         blank=True,
-        help_text="The organization that sponsors a conference or "
-        "that publishes a manual.",
+        verbose_name=_("publication_field_school_verbose"),
+        help_text=_("publication_field_school_help"),
+    )
+    organisation = models.TextField(
+        blank=True,
+        verbose_name=_("publication_field_organisation_verbose"),
+        help_text=_(
+            "The organization that sponsors a conference or " "that publishes a manual."
+        ),
     )
     location = models.TextField(
         blank=True,
-        help_text="Place of publication, location of conference, "
-        "or publisher's address.",
+        verbose_name=_("publication_field_location_verbose"),
+        help_text=_("publication_field_location_help"),
     )
-    country = CountryField(blank=True)
+    country = CountryField(
+        blank=True,
+        verbose_name=_("publication_field_country_verbose"),
+        help_text=_("publication_field_country_help"),
+    )
     series = models.TextField(
         blank=True,
-        help_text="The name of a series or set of books. When citing an "
-        "entire book, the `title` field gives its title and an "
-        "optional `series` field gives the name of a series or "
-        "multi-volume set in which the book is published.",
+        verbose_name=_("publication_field_series_verbose"),
+        help_text=_("publication_field_series_help"),
     )
-    volume = models.CharField(max_length=16, blank=True, null=True,)
+    volume = models.CharField(
+        max_length=16,
+        blank=True,
+        null=True,
+        verbose_name=_("publication_field_volume_verbose"),
+        help_text=_("publication_field_volume_help"),
+    )
     number = models.CharField(
         max_length=16,
         blank=True,
         null=True,
-        verbose_name="Issue number",
-        help_text="The number of a journal, magazine, technical report, or "
-        "of a work in a series. An issue of a journal or magazine "
-        "is usually identified by its volume and number; the "
-        "organization that issues a technical report usually "
-        "gives it a number; and sometimes books are given numbers "
-        "in a named series.",
+        verbose_name=_("publication_field_number_verbose"),
+        help_text=_("publication_field_number_help"),
     )
-    chapter = models.CharField(blank=True, null=True, max_length=255)
+    chapter = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_("publication_field_chapter_verbose"),
+        help_text=_("publication_field_chapter_help"),
+    )
     section = models.CharField(
-        blank=True, null=True, max_length=255
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_("publication_field_section_verbose"),
+        help_text=_("publication_field_section_help"),
     )  # Not officially recognized as Bibtex Field Type
-    pages = PagesField(max_length=32, blank=True)
+    pages = PagesField(
+        max_length=32,
+        blank=True,
+        verbose_name=_("publication_field_pages_verbose"),
+        help_text=_("publication_field_pages_help"),
+    )
     note = models.TextField(
         blank=True,
-        help_text="Any additional information that can help the reader. The "
-        "first word should be capitalized.",
+        verbose_name=_("publication_field_note_verbose"),
+        help_text=_("publication_field_note_help"),
     )
-    tags = models.TextField(blank=True, help_text="List of tags separated by commas.")
+    tags = models.TextField(
+        blank=True,
+        verbose_name=_("publication_field_tags_verbose"),
+        help_text=_("publication_field_tags_help"),
+    )
     url = models.URLField(
         blank=True,
         verbose_name=_("publication_field_url_verbose"),
-        help_text="Link to PDF or journal page.",
+        help_text=_("publication_field_url_help"),
     )
     code = models.URLField(
         blank=True,
         verbose_name=_("publication_field_code_verbose"),
-        help_text="Link to page with code.",
+        help_text=_("publication_field_code_help"),
     )
     pdf = models.FileField(
-        upload_to="publications_bootstrap/publication/pdfs/",
+        upload_to="publications_bootstrap/publication/pdfs/",  # TODO replace with function
         blank=True,
         null=True,
         verbose_name=_("publication_field_pdf_verbose"),
         help_text=_("publication_field_pdf_help"),
-    )
+    )  # TODO replace with django-constrainedfilefield
     image = models.ImageField(
-        upload_to="publications_bootstrap/publication/images/",
+        upload_to="publications_bootstrap/publication/images/",  # TODO replace with function
         blank=True,
         null=True,
         verbose_name=_("publication_field_image_verbose"),
         help_text=_("publication_field_image_help"),
-    )
+    )  # TODO replace with django-constrainedfilefield
     thumbnail = models.ImageField(
-        upload_to="publications_bootstrap/publication/thumbnails/",
+        upload_to="publications_bootstrap/publication/thumbnails/",  # TODO replace with function
         blank=True,
         null=True,
         verbose_name=_("publication_field_thumbnail_verbose"),
         help_text=_("publication_field_thumbnail_help"),
-    )
+    )  # TODO replace with smarter field (eg: auto-generation of thumbnail)
     external = models.BooleanField(
         default=False,
         db_index=True,
         verbose_name=_("publication_field_external_verbose"),
-        help_text="If publication was written in another lab, mark as external.",
+        help_text=_("publication_field_external_help"),
     )
-    abstract = models.TextField(blank=True)
+    abstract = models.TextField(
+        blank=True,
+        verbose_name=_("publication_field_abstract_verbose"),
+        help_text=_("publication_field_abstract_help"),
+    )
     doi = models.CharField(
         max_length=32,
         blank=True,
@@ -227,8 +284,13 @@ class Publication(models.Model):
         help_text=_("publication_field_issn_help"),
     )
     # TODO replace with dedicated ISSN field (with validator and helpers)
-
-    status = make_echoicefield(EStatuses, default=EStatuses.PUBLISHED, blank=False)
+    status = make_echoicefield(
+        EStatuses,
+        default=EStatuses.PUBLISHED,
+        blank=False,
+        verbose_name=_("publication_field_status_verbose"),
+        help_text=_("publication_field_status_help"),
+    )
 
     def __init__(self, *args, **kwargs):
         models.Model.__init__(self, *args, **kwargs)
