@@ -205,25 +205,20 @@ class Publication(models.Model):
         verbose_name=_("publication_field_pages_verbose"),
         help_text=_("publication_field_pages_help"),
     )
+    abstract = models.TextField(
+        blank=True,
+        verbose_name=_("publication_field_abstract_verbose"),
+        help_text=_("publication_field_abstract_help"),
+    )
+    annote = models.TextField(
+        blank=True,
+        verbose_name=_("publication_field_annote_verbose"),
+        help_text=_("publication_field_annote_help"),
+    )
     note = models.TextField(
         blank=True,
         verbose_name=_("publication_field_note_verbose"),
         help_text=_("publication_field_note_help"),
-    )
-    tags = models.TextField(
-        blank=True,
-        verbose_name=_("publication_field_tags_verbose"),
-        help_text=_("publication_field_tags_help"),
-    )
-    url = models.URLField(
-        blank=True,
-        verbose_name=_("publication_field_url_verbose"),
-        help_text=_("publication_field_url_help"),
-    )
-    code = models.URLField(
-        blank=True,
-        verbose_name=_("publication_field_code_verbose"),
-        help_text=_("publication_field_code_help"),
     )
     pdf = models.FileField(
         upload_to="publications_bootstrap/publication/pdfs/",  # TODO replace with function
@@ -246,16 +241,21 @@ class Publication(models.Model):
         verbose_name=_("publication_field_thumbnail_verbose"),
         help_text=_("publication_field_thumbnail_help"),
     )  # TODO replace with smarter field (eg: auto-generation of thumbnail)
+    url = models.URLField(
+        blank=True,
+        verbose_name=_("publication_field_url_verbose"),
+        help_text=_("publication_field_url_help"),
+    )
+    code = models.URLField(
+        blank=True,
+        verbose_name=_("publication_field_code_verbose"),
+        help_text=_("publication_field_code_help"),
+    )
     external = models.BooleanField(
         default=False,
         db_index=True,
         verbose_name=_("publication_field_external_verbose"),
         help_text=_("publication_field_external_help"),
-    )
-    abstract = models.TextField(
-        blank=True,
-        verbose_name=_("publication_field_abstract_verbose"),
-        help_text=_("publication_field_abstract_help"),
     )
     doi = models.CharField(
         max_length=32,
@@ -282,6 +282,11 @@ class Publication(models.Model):
         unique=True,
         verbose_name=_("publication_field_issn_verbose"),
         help_text=_("publication_field_issn_help"),
+    )
+    tags = models.TextField(
+        blank=True,
+        verbose_name=_("publication_field_tags_verbose"),
+        help_text=_("publication_field_tags_help"),
     )
     # TODO replace with dedicated ISSN field (with validator and helpers)
     status = make_echoicefield(

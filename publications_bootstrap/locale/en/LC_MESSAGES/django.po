@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-23 11:52+0200\n"
+"POT-Creation-Date: 2020-05-23 12:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: MARC BOURQUI <pypi.kemar@bourqui.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -296,84 +296,80 @@ msgid "publication_field_pages_help"
 msgstr "Page numbers or a page range"
 
 #: models/publication.py:210
+msgid "publication_field_abstract_verbose"
+msgstr "Abstract"
+
+#: models/publication.py:211
+msgid "publication_field_abstract_help"
+msgstr "Abstract from the publication"
+
+#: models/publication.py:215
+msgid "publication_field_annote_verbose"
+msgstr "Annote"
+
+#: models/publication.py:216
+msgid "publication_field_annote_help"
+msgstr ""
+"Annotation (brief, descriptive paragraph) about the reference like one would "
+"use in an annotated bibliography"
+
+#: models/publication.py:220
 msgid "publication_field_note_verbose"
 msgstr "Note"
 
-#: models/publication.py:211
+#: models/publication.py:221
 msgid "publication_field_note_help"
 msgstr ""
 "Any additional information that can help the reader. The first word should "
 "be capitalized."
 
-#: models/publication.py:215
-msgid "publication_field_tags_verbose"
-msgstr "Tags"
-
-#: models/publication.py:216
-msgid "publication_field_tags_help"
-msgstr ""
-"List of tags separated by commas. Used to help organising, searching and "
-"filtering"
-
-#: models/publication.py:220
-msgid "publication_field_url_verbose"
-msgstr "URL"
-
-#: models/publication.py:221
-msgid "publication_field_url_help"
-msgstr "Link to PDF or journal page."
-
-#: models/publication.py:225
-msgid "publication_field_code_verbose"
-msgstr "Code"
-
-#: models/publication.py:226
-msgid "publication_field_code_help"
-msgstr "Link to page with code."
-
-#: models/publication.py:232
+#: models/publication.py:227
 msgid "publication_field_pdf_verbose"
 msgstr "PDF"
 
-#: models/publication.py:233
+#: models/publication.py:228
 msgid "publication_field_pdf_help"
 msgstr "The actual document in pdf format"
 
-#: models/publication.py:239
+#: models/publication.py:234
 msgid "publication_field_image_verbose"
 msgstr "Image"
 
-#: models/publication.py:240
+#: models/publication.py:235
 msgid "publication_field_image_help"
 msgstr ""
 
-#: models/publication.py:246
+#: models/publication.py:241
 msgid "publication_field_thumbnail_verbose"
 msgstr "Tumbnail"
 
-#: models/publication.py:247
+#: models/publication.py:242
 msgid "publication_field_thumbnail_help"
 msgstr ""
 
+#: models/publication.py:246
+msgid "publication_field_url_verbose"
+msgstr "URL"
+
+#: models/publication.py:247
+msgid "publication_field_url_help"
+msgstr "Link to PDF or journal page."
+
+#: models/publication.py:251
+msgid "publication_field_code_verbose"
+msgstr "Code"
+
 #: models/publication.py:252
+msgid "publication_field_code_help"
+msgstr "Link to page with code."
+
+#: models/publication.py:257
 msgid "publication_field_external_verbose"
 msgstr "External"
 
-#: models/publication.py:253
+#: models/publication.py:258
 msgid "publication_field_external_help"
 msgstr "If publication was written in another lab, mark as external."
-
-#: models/publication.py:257
-#, fuzzy
-#| msgid "publication_field_year_verbose"
-msgid "publication_field_abstract_verbose"
-msgstr "Year"
-
-#: models/publication.py:258
-#, fuzzy
-#| msgid "publication_field_year_help"
-msgid "publication_field_abstract_help"
-msgstr "Year of publication, or if not published the year it was written"
 
 #: models/publication.py:265
 msgid "publication_field_doi_verbose"
@@ -399,11 +395,21 @@ msgstr "ISSN"
 msgid "publication_field_issn_help"
 msgstr "International Standard Serial Number, if any"
 
-#: models/publication.py:291
+#: models/publication.py:288
+msgid "publication_field_tags_verbose"
+msgstr "Tags"
+
+#: models/publication.py:289
+msgid "publication_field_tags_help"
+msgstr ""
+"List of tags separated by commas. Used to help organising, searching and "
+"filtering"
+
+#: models/publication.py:296
 msgid "publication_field_status_verbose"
 msgstr "Status"
 
-#: models/publication.py:292
+#: models/publication.py:297
 msgid "publication_field_status_help"
 msgstr "Work status"
 
