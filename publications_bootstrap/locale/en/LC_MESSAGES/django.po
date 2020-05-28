@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-23 12:02+0200\n"
+"POT-Creation-Date: 2020-05-28 16:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: MARC BOURQUI <pypi.kemar@bourqui.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,232 +38,272 @@ msgstr ""
 msgid "Mark selected %(verbose_name_plural)s as published"
 msgstr ""
 
-#: models/publication.py:41
+#: models/catalog.py:15
+msgid "catalog"
+msgstr "Catalog"
+
+#: models/catalog.py:16
+msgid "catalogs"
+msgstr "Catalogs"
+
+#: models/catalog.py:23
+msgid "catalog_field_title_verbose"
+msgstr "Title"
+
+#: models/catalog.py:24
+msgid "catalog_field_title_help"
+msgstr "Title of the catalog"
+
+#: models/catalog.py:27
+msgid "catalog_field_description_verbose"
+msgstr "Description"
+
+#: models/catalog.py:28
+msgid "catalog_field_description_help"
+msgstr "Description of the catalog"
+
+#: models/catalog.py:34
+msgid "catalog_field_publications_verbose"
+msgstr "Publications"
+
+#: models/catalog.py:35
+msgid "catalog_field_publications_help"
+msgstr "Content of the catalog"
+
+#: models/publication.py:36
+msgid "publication"
+msgstr "publication"
+
+#: models/publication.py:37
+msgid "publications"
+msgstr "publications"
+
+#: models/publication.py:43
 msgid "month_january"
 msgstr "January"
 
-#: models/publication.py:42
+#: models/publication.py:44
 msgid "month_february"
 msgstr "February"
 
-#: models/publication.py:43
+#: models/publication.py:45
 msgid "month_march"
 msgstr "March"
 
-#: models/publication.py:44
+#: models/publication.py:46
 msgid "month_april"
 msgstr "April"
 
-#: models/publication.py:45
+#: models/publication.py:47
 msgid "month_may"
 msgstr "May"
 
-#: models/publication.py:46
+#: models/publication.py:48
 msgid "month_june"
 msgstr "June"
 
-#: models/publication.py:47
+#: models/publication.py:49
 msgid "month_july"
 msgstr "July"
 
-#: models/publication.py:48
+#: models/publication.py:50
 msgid "month_august"
 msgstr "August"
 
-#: models/publication.py:49
+#: models/publication.py:51
 msgid "month_september"
 msgstr "September"
 
-#: models/publication.py:50
+#: models/publication.py:52
 msgid "month_october"
 msgstr "October"
 
-#: models/publication.py:51
+#: models/publication.py:53
 msgid "month_november"
 msgstr "November"
 
-#: models/publication.py:52
+#: models/publication.py:54
 msgid "month_december"
 msgstr "December"
 
-#: models/publication.py:68
+#: models/publication.py:70
 msgid "publication_status_draft"
 msgstr "draft"
 
-#: models/publication.py:69
+#: models/publication.py:71
 msgid "publication_status_submitted"
 msgstr "submitted"
 
-#: models/publication.py:70
+#: models/publication.py:72
 msgid "publication_status_accepted"
 msgstr "accepted"
 
-#: models/publication.py:71
+#: models/publication.py:73
 msgid "publication_status_published"
 msgstr "published"
 
-#: models/publication.py:84
+#: models/publication.py:86
 msgid "publication_field_type_verbose"
 msgstr "Type"
 
-#: models/publication.py:85
+#: models/publication.py:87
 msgid "publication_field_type_help"
 msgstr "BibTex entry type"
 
-#: models/publication.py:93
+#: models/publication.py:95
 msgid "publication_field_citekey_verbose"
 msgstr "Citekey"
 
-#: models/publication.py:94
+#: models/publication.py:96
 msgid "publication_field_citekey_help"
 msgstr ""
 "BibTex citation key (unique human-readable reference). Leave blank if unsure."
 
-#: models/publication.py:98
+#: models/publication.py:100
 msgid "publication_field_title_verbose"
 msgstr "Title"
 
-#: models/publication.py:99
+#: models/publication.py:101
 msgid "publication_field_title_help"
 msgstr "Title of the work"
 
-#: models/publication.py:102
+#: models/publication.py:104
 msgid "publication_field_authors_verbose"
 msgstr "Authors"
 
-#: models/publication.py:103
+#: models/publication.py:105
 msgid "publication_field_authors_help"
 msgstr "List of authors separated by commas or <i>and</i>."
 
-#: models/publication.py:107
+#: models/publication.py:109
 msgid "publication_field_year_verbose"
 msgstr "Year"
 
-#: models/publication.py:108
+#: models/publication.py:110
 msgid "publication_field_year_help"
 msgstr "Year of publication, or if not published the year it was written"
 
-#: models/publication.py:114
+#: models/publication.py:116
 msgid "publication_field_month_verbose"
 msgstr "Month"
 
-#: models/publication.py:115
+#: models/publication.py:117
 msgid "publication_field_month_help"
 msgstr "Month of publication, or if not published the month it was written"
 
-#: models/publication.py:119
+#: models/publication.py:121
 msgid "publication_field_journal_verbose"
 msgstr "Journal"
 
-#: models/publication.py:120
+#: models/publication.py:122
 msgid "publication_field_journal_help"
 msgstr "Journal or magazine the article was published in"
 
-#: models/publication.py:124
+#: models/publication.py:126
 msgid "publication_field_booktitle_verbose"
 msgstr "Book title"
 
-#: models/publication.py:125
+#: models/publication.py:127
 msgid "publication_field_booktitle_help"
 msgstr ""
 "Title of a book, part of which is being cited. See the LATEX book for how to "
 "type titles. For book entries, use the `title` field instead"
 
-#: models/publication.py:129
+#: models/publication.py:131
 msgid "publication_field_publisher_verbose"
 msgstr "Publisher"
 
-#: models/publication.py:130
+#: models/publication.py:132
 msgid "publication_field_publisher_help"
 msgstr "Name of the publisher"
 
-#: models/publication.py:134
+#: models/publication.py:136
 msgid "publication_field_editor_verbose"
 msgstr "Editor"
 
-#: models/publication.py:135
+#: models/publication.py:137
 msgid "publication_field_editor_help"
 msgstr ""
 "Name(s) of editor(s), typed as indicated in the LATEX book. If there is also "
 "an `author` field, then the `editor` field gives the editor of the book or "
 "collection in which the reference appears."
 
-#: models/publication.py:139
+#: models/publication.py:141
 msgid "publication_field_edition_verbose"
 msgstr "Edition"
 
-#: models/publication.py:140
+#: models/publication.py:142
 msgid "publication_field_edition_help"
 msgstr ""
 "The edition of a book -- for example, \"Second\". This should be an ordinal, "
 "and should have the first letter capitalized."
 
-#: models/publication.py:144
+#: models/publication.py:146
 msgid "publication_field_institution_verbose"
 msgstr "Institution"
 
-#: models/publication.py:145
+#: models/publication.py:147
 msgid "publication_field_institution_help"
 msgstr "Name of the institution that published and/or sponsored the report"
 
-#: models/publication.py:149
+#: models/publication.py:151
 msgid "publication_field_school_verbose"
 msgstr "School"
 
-#: models/publication.py:150
+#: models/publication.py:152
 msgid "publication_field_school_help"
 msgstr ""
 "Name of the university or degree awarding institution where the thesis was "
 "written"
 
-#: models/publication.py:154
+#: models/publication.py:156
 msgid "publication_field_organisation_verbose"
 msgstr "Organisation"
 
-#: models/publication.py:156
+#: models/publication.py:158
 msgid "The organization that sponsors a conference or that publishes a manual."
 msgstr ""
 
-#: models/publication.py:161
+#: models/publication.py:163
 msgid "publication_field_location_verbose"
 msgstr "Location"
 
-#: models/publication.py:162
+#: models/publication.py:164
 msgid "publication_field_location_help"
 msgstr "Place of publication, location of conference, or publisher's address."
 
-#: models/publication.py:166
+#: models/publication.py:168
 msgid "publication_field_country_verbose"
 msgstr "Country"
 
-#: models/publication.py:167
+#: models/publication.py:169
 msgid "publication_field_country_help"
 msgstr "Country of the location"
 
-#: models/publication.py:171
+#: models/publication.py:173
 msgid "publication_field_series_verbose"
 msgstr "Series"
 
-#: models/publication.py:172
+#: models/publication.py:174
 msgid "publication_field_series_help"
 msgstr ""
 "The name of a series or set of books. When citing an entire book, the "
 "`title` field gives its title and an optional `series` field gives the name "
 "of a series or multi-volume set in which the book is published."
 
-#: models/publication.py:178
+#: models/publication.py:180
 msgid "publication_field_volume_verbose"
 msgstr "Volume"
 
-#: models/publication.py:179
+#: models/publication.py:181
 msgid "publication_field_volume_help"
 msgstr "Volume number of the journal or multi-volume book"
 
-#: models/publication.py:185
+#: models/publication.py:187
 msgid "publication_field_number_verbose"
 msgstr "Number"
 
-#: models/publication.py:186
+#: models/publication.py:188
 msgid "publication_field_number_help"
 msgstr ""
 "The number of a journal, magazine, technical report, or of a work in a "
@@ -271,145 +311,145 @@ msgstr ""
 "volume and number; the organization that issues a technical report usually "
 "gives it a number; and sometimes books are given numbers in a named series."
 
-#: models/publication.py:192
+#: models/publication.py:194
 msgid "publication_field_chapter_verbose"
 msgstr "Chapter"
 
-#: models/publication.py:193
+#: models/publication.py:195
 msgid "publication_field_chapter_help"
 msgstr "Number of a chapter in a book"
 
-#: models/publication.py:199
+#: models/publication.py:201
 msgid "publication_field_section_verbose"
 msgstr "Section"
 
-#: models/publication.py:200
+#: models/publication.py:202
 msgid "publication_field_section_help"
 msgstr ""
 
-#: models/publication.py:205
+#: models/publication.py:207
 msgid "publication_field_pages_verbose"
 msgstr "Pages"
 
-#: models/publication.py:206
+#: models/publication.py:208
 msgid "publication_field_pages_help"
 msgstr "Page numbers or a page range"
 
-#: models/publication.py:210
+#: models/publication.py:212
 msgid "publication_field_abstract_verbose"
 msgstr "Abstract"
 
-#: models/publication.py:211
+#: models/publication.py:213
 msgid "publication_field_abstract_help"
 msgstr "Abstract from the publication"
 
-#: models/publication.py:215
+#: models/publication.py:217
 msgid "publication_field_annote_verbose"
 msgstr "Annote"
 
-#: models/publication.py:216
+#: models/publication.py:218
 msgid "publication_field_annote_help"
 msgstr ""
 "Annotation (brief, descriptive paragraph) about the reference like one would "
 "use in an annotated bibliography"
 
-#: models/publication.py:220
+#: models/publication.py:222
 msgid "publication_field_note_verbose"
 msgstr "Note"
 
-#: models/publication.py:221
+#: models/publication.py:223
 msgid "publication_field_note_help"
 msgstr ""
 "Any additional information that can help the reader. The first word should "
 "be capitalized."
 
-#: models/publication.py:227
+#: models/publication.py:229
 msgid "publication_field_pdf_verbose"
 msgstr "PDF"
 
-#: models/publication.py:228
+#: models/publication.py:230
 msgid "publication_field_pdf_help"
 msgstr "The actual document in pdf format"
 
-#: models/publication.py:234
+#: models/publication.py:236
 msgid "publication_field_image_verbose"
 msgstr "Image"
 
-#: models/publication.py:235
+#: models/publication.py:237
 msgid "publication_field_image_help"
 msgstr ""
 
-#: models/publication.py:241
+#: models/publication.py:243
 msgid "publication_field_thumbnail_verbose"
 msgstr "Tumbnail"
 
-#: models/publication.py:242
+#: models/publication.py:244
 msgid "publication_field_thumbnail_help"
 msgstr ""
 
-#: models/publication.py:246
+#: models/publication.py:248
 msgid "publication_field_url_verbose"
 msgstr "URL"
 
-#: models/publication.py:247
+#: models/publication.py:249
 msgid "publication_field_url_help"
 msgstr "Link to PDF or journal page."
 
-#: models/publication.py:251
+#: models/publication.py:253
 msgid "publication_field_code_verbose"
 msgstr "Code"
 
-#: models/publication.py:252
+#: models/publication.py:254
 msgid "publication_field_code_help"
 msgstr "Link to page with code."
 
-#: models/publication.py:257
+#: models/publication.py:259
 msgid "publication_field_external_verbose"
 msgstr "External"
 
-#: models/publication.py:258
+#: models/publication.py:260
 msgid "publication_field_external_help"
 msgstr "If publication was written in another lab, mark as external."
 
-#: models/publication.py:265
+#: models/publication.py:267
 msgid "publication_field_doi_verbose"
 msgstr "DOI"
 
-#: models/publication.py:266
+#: models/publication.py:268
 msgid "publication_field_doi_help"
 msgstr "Digital Object Identifier, if any"
 
-#: models/publication.py:274
+#: models/publication.py:276
 msgid "publication_field_isbn_verbose"
 msgstr "ISBN"
 
-#: models/publication.py:275
+#: models/publication.py:277
 msgid "publication_field_isbn_help"
 msgstr "International Standard Book Number, if any"
 
-#: models/publication.py:283
+#: models/publication.py:285
 msgid "publication_field_issn_verbose"
 msgstr "ISSN"
 
-#: models/publication.py:284
+#: models/publication.py:286
 msgid "publication_field_issn_help"
 msgstr "International Standard Serial Number, if any"
 
-#: models/publication.py:288
+#: models/publication.py:290
 msgid "publication_field_tags_verbose"
 msgstr "Tags"
 
-#: models/publication.py:289
+#: models/publication.py:291
 msgid "publication_field_tags_help"
 msgstr ""
 "List of tags separated by commas. Used to help organising, searching and "
 "filtering"
 
-#: models/publication.py:296
+#: models/publication.py:298
 msgid "publication_field_status_verbose"
 msgstr "Status"
 
-#: models/publication.py:297
+#: models/publication.py:299
 msgid "publication_field_status_help"
 msgstr "Work status"
 

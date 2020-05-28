@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
 from .publication import Publication
 
 
@@ -10,12 +12,27 @@ class Catalog(models.Model):
     """
 
     class Meta:
+        verbose_name = _("catalog")
+        verbose_name_plural = _("catalogs")
         ordering = ("title",)
-        app_label = "publications_bootstrap"  # Fix for Django<1.7
 
-    title = models.CharField(max_length=128, unique=True, db_index=True)
-    description = models.CharField(max_length=128)
-    publications = models.ManyToManyField(Publication, blank=True, db_index=True)
+    title = models.TextField(
+        unique=True,
+        db_index=True,
+        verbose_name=_("catalog_field_title_verbose"),
+        help_text=_("catalog_field_title_help"),
+    )
+    description = models.TextField(
+        verbose_name=_("catalog_field_description_verbose"),
+        help_text=_("catalog_field_description_help"),
+    )
+    publications = models.ManyToManyField(
+        Publication,
+        blank=True,
+        db_index=True,
+        verbose_name=_("catalog_field_publications_verbose"),
+        help_text=_("catalog_field_publications_help"),
+    )
 
     def __unicode__(self):
         return self.title

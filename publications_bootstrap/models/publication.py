@@ -33,8 +33,9 @@ class Publication(models.Model):
     """
 
     class Meta:
+        verbose_name = _("publication")
+        verbose_name_plural = _("publications")
         ordering = ["-year", "-month", "-id"]
-        app_label = "publications_bootstrap"  # Fix for Django<1.7
 
     # names shown in admin area
     class EMonths(EOrderedChoice, metaclass=EChoiceMetaInt):
@@ -641,7 +642,7 @@ class Publication(models.Model):
         return self.catalog_set.all()
 
     @staticmethod
-    def simplify_name(name):
+    def simplify_name(name: str) -> str:
         name = name.lower()
         name = name.replace(u"ä", u"ae")
         name = name.replace(u"ö", u"oe")
