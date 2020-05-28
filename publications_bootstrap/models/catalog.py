@@ -30,7 +30,7 @@ class Catalog(models.Model):
         Publication,
         blank=True,
         db_index=True,
-        verbose_name=_("catalog_field_publications_verbose"),
+        verbose_name=_("model_fk_publications_verbose"),
         help_text=_("catalog_field_publications_help"),
     )
 

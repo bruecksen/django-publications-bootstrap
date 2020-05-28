@@ -86,13 +86,21 @@ class Publication(models.Model):
         help_text=_("publication_field_type_help"),
     )
     citekey = models.CharField(
-        max_length=255,
+        max_length=16,
         blank=True,
         null=True,
         unique=True,
         db_index=True,
         verbose_name=_("publication_field_citekey_verbose"),
         help_text=_("publication_field_citekey_help"),
+    )
+    citekey_aliases = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        unique=True,
+        verbose_name=_("publication_field_citekeyaliases_verbose"),
+        help_text=_("publication_field_citekeyaliases_help"),
     )
     title = models.TextField(
         db_index=True,
