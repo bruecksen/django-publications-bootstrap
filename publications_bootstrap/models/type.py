@@ -18,8 +18,7 @@ class Type(OrderedModel):
         verbose_name=_("model_field_title_verbose"),
         help_text=_("type_field_title_help"),
     )
-    description = models.CharField(
-        max_length=128,
+    description = models.TextField(
         verbose_name=_("model_field_description_verbose"),
         help_text=_("type_field_description_help"),
     )
@@ -28,15 +27,12 @@ class Type(OrderedModel):
         default="article",
         verbose_name=_("type_field_bibtextypes_verbose"),
         help_text=_("type_field_bibtextypes_help"),
-        # verbose_name="BibTex types",
-        # help_text="Possible BibTex types, separated by comma.",
     )
     hidden = models.BooleanField(
         default=False,
         db_index=True,
         verbose_name=_("citation_field_citekey_verbose"),
         help_text=_("citation_field_citekey_help"),
-        # help_text="Hide publications from main view.",
     )
 
     def __unicode__(self):

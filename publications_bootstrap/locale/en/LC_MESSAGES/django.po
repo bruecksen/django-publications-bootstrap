@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-28 17:28+0200\n"
+"POT-Creation-Date: 2020-05-28 17:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: MARC BOURQUI <pypi.kemar@bourqui.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,7 +54,7 @@ msgstr "title"
 msgid "catalog_field_title_help"
 msgstr "Title of the catalog"
 
-#: models/catalog.py:26 models/type.py:23
+#: models/catalog.py:26 models/publicationfile.py:20 models/type.py:22
 msgid "model_field_description_verbose"
 msgstr "description"
 
@@ -66,7 +66,7 @@ msgstr "Description of the catalog"
 msgid "model_fk_publications_verbose"
 msgstr "publications"
 
-#: models/catalog.py:34
+#: models/catalog.py:34 models/publicationfile.py:21
 msgid "catalog_field_publications_help"
 msgstr "Content of the catalog"
 
@@ -78,11 +78,11 @@ msgstr "citation"
 msgid "citations"
 msgstr "citations"
 
-#: models/citation.py:21 models/type.py:37
+#: models/citation.py:21 models/type.py:36
 msgid "citation_field_citekey_verbose"
 msgstr "citekey"
 
-#: models/citation.py:22 models/type.py:38
+#: models/citation.py:22 models/type.py:37
 msgid "citation_field_citekey_help"
 msgstr "BibTex citation key (unique human-readable reference)"
 
@@ -94,7 +94,8 @@ msgstr "field name"
 msgid "citation_field_fieldname_help"
 msgstr "name of the field in which to look for citations"
 
-#: models/citation.py:37
+#: models/citation.py:37 models/publicationfile.py:26
+#: models/publicationlink.py:25 models/publicationlink.py:31
 msgid "model_fk_publication_verbose"
 msgstr "publication"
 
@@ -447,8 +448,8 @@ msgstr "Code"
 msgid "publication_field_code_help"
 msgstr "Link to page with code."
 
-#: models/publication.py:264
-msgid "publication_field_external_verbose"
+#: models/publication.py:264 models/publicationlink.py:21
+msgid "model_field_external_verbose"
 msgstr "External"
 
 #: models/publication.py:265
@@ -497,6 +498,50 @@ msgstr "Status"
 msgid "publication_field_status_help"
 msgstr "Work status"
 
+#: models/publicationfile.py:11
+msgid "publicationfile"
+msgstr "publication file"
+
+#: models/publicationfile.py:12
+msgid "publicationfiles"
+msgstr "publication files"
+
+#: models/publicationfile.py:16
+msgid "model_field_file_verbose"
+msgstr "file"
+
+#: models/publicationfile.py:17
+msgid "publicationfile_field_file_help"
+msgstr "any kind of document, could be data or examples"
+
+#: models/publicationfile.py:27 models/publicationlink.py:26
+msgid "publicationfile_field_publication_help"
+msgstr "the publication to which this file is attached to"
+
+#: models/publicationlink.py:11
+msgid "publicationlink"
+msgstr "publication link"
+
+#: models/publicationlink.py:12
+msgid "publicationlinks"
+msgstr "publication links"
+
+#: models/publicationlink.py:15
+msgid "publicationlink_field_url_verbose"
+msgstr "URL"
+
+#: models/publicationlink.py:16
+msgid "publicationlink_field_url_help"
+msgstr "link to an online resource"
+
+#: models/publicationlink.py:22
+msgid "publicationlink_field_external_help"
+msgstr "if the link point to an other domain"
+
+#: models/publicationlink.py:32
+msgid "publicationlink_field_publication_help"
+msgstr "the publication to which this link is attached to"
+
 #: models/type.py:10
 msgid "type"
 msgstr "type"
@@ -509,15 +554,15 @@ msgstr "types"
 msgid "type_field_title_help"
 msgstr "title"
 
-#: models/type.py:24
+#: models/type.py:23
 msgid "type_field_description_help"
 msgstr "description of the field type"
 
-#: models/type.py:29
+#: models/type.py:28
 msgid "type_field_bibtextypes_verbose"
 msgstr "Bibtex types"
 
-#: models/type.py:30
+#: models/type.py:29
 msgid "type_field_bibtextypes_help"
 msgstr "possible BibTex types, separated by comma"
 

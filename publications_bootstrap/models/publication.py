@@ -261,7 +261,7 @@ class Publication(models.Model):
     external = models.BooleanField(
         default=False,
         db_index=True,
-        verbose_name=_("publication_field_external_verbose"),
+        verbose_name=_("model_field_external_verbose"),
         help_text=_("publication_field_external_help"),
     )
     doi = models.CharField(
