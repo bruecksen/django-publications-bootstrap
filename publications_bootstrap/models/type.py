@@ -1,25 +1,42 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-
+from django.utils.translation import ugettext_lazy as _
 from ordered_model.models import OrderedModel
 
 
 class Type(OrderedModel):
     class Meta:
+        verbose_name = _("type")
+        verbose_name_plural = _("types")
         ordering = ("order",)
-        app_label = "publications_bootstrap"  # Fix for Django<1.7
 
-    title = models.CharField(max_length=128, unique=True, db_index=True)
-    description = models.CharField(max_length=128)
+    title = models.CharField(
+        max_length=128,
+        unique=True,
+        db_index=True,
+        verbose_name=_("model_field_title_verbose"),
+        help_text=_("type_field_title_help"),
+    )
+    description = models.CharField(
+        max_length=128,
+        verbose_name=_("model_field_description_verbose"),
+        help_text=_("type_field_description_help"),
+    )
     bibtex_types = models.CharField(
         max_length=256,
         default="article",
-        verbose_name="BibTex types",
-        help_text="Possible BibTex types, separated by comma.",
+        verbose_name=_("type_field_bibtextypes_verbose"),
+        help_text=_("type_field_bibtextypes_help"),
+        # verbose_name="BibTex types",
+        # help_text="Possible BibTex types, separated by comma.",
     )
     hidden = models.BooleanField(
-        default=False, db_index=True, help_text="Hide publications from main view."
+        default=False,
+        db_index=True,
+        verbose_name=_("citation_field_citekey_verbose"),
+        help_text=_("citation_field_citekey_help"),
+        # help_text="Hide publications from main view.",
     )
 
     def __unicode__(self):

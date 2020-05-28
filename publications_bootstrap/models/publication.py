@@ -161,9 +161,7 @@ class Publication(models.Model):
     organisation = models.TextField(
         blank=True,
         verbose_name=_("publication_field_organisation_verbose"),
-        help_text=_(
-            "The organization that sponsors a conference or " "that publishes a manual."
-        ),
+        help_text=_("publication_field_organisation_help"),
     )
     location = models.TextField(
         blank=True,

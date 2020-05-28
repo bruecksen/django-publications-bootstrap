@@ -19,11 +19,11 @@ class Catalog(models.Model):
     title = models.TextField(
         unique=True,
         db_index=True,
-        verbose_name=_("catalog_field_title_verbose"),
+        verbose_name=_("model_field_title_verbose"),
         help_text=_("catalog_field_title_help"),
     )
     description = models.TextField(
-        verbose_name=_("catalog_field_description_verbose"),
+        verbose_name=_("model_field_description_verbose"),
         help_text=_("catalog_field_description_help"),
     )
     publications = models.ManyToManyField(
