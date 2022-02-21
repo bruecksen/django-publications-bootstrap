@@ -39,7 +39,7 @@ setup(
         'django-countries>=4.0',
         'django-ordered-model>=1.4.1',
         'six>=1.10.0',
-        'django-echoices>=2.2.5',
+        'django-echoices@git+https://github.com/mbourqui/django-echoices@v.2.8.1#egg=django-echoices',
     ],
     zip_safe=False,
     keywords='django scientific publications citations references bibliography',

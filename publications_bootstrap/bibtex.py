@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import re
 
-from django.utils import six
+import six
 
 # from . import six
 
